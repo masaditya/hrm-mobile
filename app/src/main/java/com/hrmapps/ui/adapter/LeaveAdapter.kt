@@ -39,18 +39,56 @@ class LeaveAdapter(private val leaveList: List<Leave>) :
 
             binding.expandIcon.setOnClickListener {
                 isExpanded = !isExpanded
+
+                binding.expandIcon.setImageResource(if (isExpanded) R.drawable.ic_expand_less else R.drawable.ic_expand_more)
+
                 val anim = AnimationUtils.loadAnimation(
                     binding.root.context,
                     if (isExpanded) R.anim.anim_rotate_expand else R.anim.anim_rotate_collapse
                 )
                 binding.expandIcon.startAnimation(anim)
 
-                binding.layoutAlasanCuti.visibility = if (isExpanded) View.VISIBLE else View.GONE
+                if (isExpanded) {
+                    expand(binding.layoutAlasanCuti)
+                } else {
+                    collapse(binding.layoutAlasanCuti)
+                }
             }
 
             binding.root.setOnClickListener {
                 binding.expandIcon.performClick()
             }
         }
+
+        private fun expand(view: View) {
+            view.visibility = View.VISIBLE
+            view.measure(View.MeasureSpec.makeMeasureSpec(view.width, View.MeasureSpec.AT_MOST),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED))
+
+            view.alpha = 0f
+            view.scaleY = 0.0f
+            view.animate()
+                .alpha(1f)
+                .scaleY(1f)
+                .setDuration(200)
+                .withStartAction { view.layoutParams.height = 0; view.requestLayout() }
+                .withEndAction { view.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT; view.requestLayout() }
+                .start()
+        }
+
+        private fun collapse(view: View) {
+            val initialHeight = view.measuredHeight
+
+            view.animate()
+                .alpha(0f)
+                .scaleY(0f)
+                .setDuration(200)
+                .withEndAction {
+                    view.visibility = View.GONE
+                    view.layoutParams.height = initialHeight
+                }
+                .start()
+        }
     }
+
 }

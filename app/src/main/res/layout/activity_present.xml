@@ -59,6 +59,7 @@
             android:backgroundTint="@color/primary_dark"
             android:text="Re-take Selfie"
             android:textColor="@color/white"
+            android:layout_marginTop="8dp"
             android:drawableTint="@color/white"
             android:drawableLeft="@drawable/ic_retry"
             android:visibility="gone"

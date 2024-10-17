@@ -3,6 +3,7 @@ package com.hrmapps.ui.view.activity
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -83,7 +84,7 @@ class MainActivity : AppCompatActivity() {
                 CAMERA_PERMISSION_CODE
             )
         } else {
-
+            Log.d("Permission", "Izin kamera diberikan")
         }
     }
 
@@ -96,7 +97,7 @@ class MainActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == CAMERA_PERMISSION_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
+                Log.d("Permission", "Izin kamera diberikan")
             } else {
                 Toast.makeText(this, "Izin kamera ditolak", Toast.LENGTH_SHORT).show()
             }

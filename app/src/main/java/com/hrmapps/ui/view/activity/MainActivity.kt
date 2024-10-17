@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        checkCameraPermission()
 
         binding.bottomNavigation.add(
             CurvedBottomNavigation.Model(1, "History", R.drawable.ic_history)
@@ -82,7 +83,7 @@ class MainActivity : AppCompatActivity() {
                 CAMERA_PERMISSION_CODE
             )
         } else {
-            Toast.makeText(this, "Izin kamera sudah diberikan", Toast.LENGTH_SHORT).show()
+
         }
     }
 
@@ -95,7 +96,7 @@ class MainActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == CAMERA_PERMISSION_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Izin kamera diberikan", Toast.LENGTH_SHORT).show()
+
             } else {
                 Toast.makeText(this, "Izin kamera ditolak", Toast.LENGTH_SHORT).show()
             }

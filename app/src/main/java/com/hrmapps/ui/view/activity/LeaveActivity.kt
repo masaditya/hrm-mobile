@@ -1,5 +1,6 @@
 package com.hrmapps.ui.view.activity
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -35,6 +36,9 @@ class LeaveActivity : AppCompatActivity() {
         binding.rvLeave.apply {
             adapter = leaveAdapter
             layoutManager = LinearLayoutManager(this@LeaveActivity)
+        }
+        binding.fabAddForm.setOnClickListener {
+            startActivity(Intent(this, AddNewFormLeaveActivity::class.java))
         }
     }
 }

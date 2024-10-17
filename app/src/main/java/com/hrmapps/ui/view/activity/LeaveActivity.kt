@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.hrmapps.R
 import com.hrmapps.data.model.Leave
 import com.hrmapps.databinding.ActivityLeaveBinding
-import com.hrmapps.ui.view.LeaveAdapter
+import com.hrmapps.ui.adapter.LeaveAdapter
 
 class LeaveActivity : AppCompatActivity() {
 

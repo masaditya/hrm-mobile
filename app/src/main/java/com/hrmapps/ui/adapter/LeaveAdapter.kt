@@ -1,4 +1,4 @@
-package com.hrmapps.ui.view
+package com.hrmapps.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.View

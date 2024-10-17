@@ -44,9 +44,11 @@
 
         <ImageView
             android:id="@+id/imgPreview"
-            android:layout_width="200dp"
-            android:layout_height="300dp"
+            android:layout_width="300dp"
+            android:layout_height="400dp"
+            android:src="@drawable/img_preview"
             android:scaleType="centerCrop"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -57,36 +59,15 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/primary_dark"
             android:text="Re-take Selfie"
-            android:textAllCaps="false"
             android:textColor="@color/white"
-            android:layout_marginTop="8dp"
             android:drawableTint="@color/white"
             android:drawableLeft="@drawable/ic_retry"
-            android:visibility="visible"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imgPreview" />
-        <ImageView
-            android:id="@+id/ic_map_pin"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginTop="16dp"
-            app:tint="@color/white"
-            android:src="@drawable/ic_map_pin"
-            app:layout_constraintTop_toBottomOf="@+id/reSelfie"
-            app:layout_constraintStart_toStartOf="parent" />
 
-        <TextView
-            android:id="@+id/locationAddress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="Current Location Address"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="@+id/ic_map_pin"
-            app:layout_constraintStart_toEndOf="@+id/ic_map_pin"
-            app:layout_constraintTop_toTopOf="@+id/ic_map_pin" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.button.MaterialButton
@@ -94,6 +75,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/primary_dark"
+        android:enabled="false"
         android:textSize="18dp"
         android:drawableLeft="@drawable/ic_checkin"
         android:drawableTint="@color/white"
@@ -104,7 +86,6 @@
         android:paddingVertical="12dp"
         android:text="Check-in Now"
         app:cornerRadius="-50dp"
-        android:enabled="false"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

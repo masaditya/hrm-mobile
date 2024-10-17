@@ -8,6 +8,7 @@ import android.graphics.Bitmap
 import android.location.Location
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -70,6 +71,10 @@ class PresentActivity : AppCompatActivity(), OnMapReadyCallback {
         binding.reSelfie.setOnClickListener {
             openCamera()
         }
+        binding.mToolbar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -92,7 +97,7 @@ class PresentActivity : AppCompatActivity(), OnMapReadyCallback {
         if (takePictureIntent.resolveActivity(packageManager) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
         } else {
-            Toast.makeText(this, "No camera app found", Toast.LENGTH_SHORT).show()
+            Log.d("Camera", "No camera app found")
         }
     }
 

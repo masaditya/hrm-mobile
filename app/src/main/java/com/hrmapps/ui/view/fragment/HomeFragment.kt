@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import com.hrmapps.databinding.FragmentHomeBinding
 import com.hrmapps.ui.view.activity.LeaveActivity
 import com.hrmapps.ui.view.activity.PresentActivity
+import com.hrmapps.ui.view.activity.RequestActivity
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -52,6 +53,9 @@ class HomeFragment : Fragment() {
         }
         binding.btLeave.setOnClickListener {
             startActivity(Intent(requireContext(), LeaveActivity::class.java))
+        }
+        binding.btRequest.setOnClickListener {
+            startActivity(Intent(requireContext(), RequestActivity::class.java))
         }
     }
 

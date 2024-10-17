@@ -1,5 +1,6 @@
 package com.hrmapps.ui.view.fragment
 
+import android.content.Intent
 import android.icu.util.Calendar
 import android.os.Bundle
 import android.os.Handler
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.hrmapps.databinding.FragmentHomeBinding
+import com.hrmapps.ui.view.activity.PresentActivity
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -43,6 +45,9 @@ class HomeFragment : Fragment() {
         }
         binding.btCheckpoint.setOnClickListener {
 
+        }
+        binding.btPresent.setOnClickListener {
+            startActivity(Intent(requireContext(), PresentActivity::class.java))
         }
     }
 

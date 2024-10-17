@@ -80,7 +80,6 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_gravity="end"
-            android:src="@drawable/ic_expand_more"
             android:layout_marginTop="8dp" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

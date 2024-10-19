@@ -37,7 +37,7 @@
         android:layout_height="0dp"
         android:padding="16dp"
         android:background="@drawable/radial_gradient_circle"
-        app:layout_constraintBottom_toTopOf="@+id/mapView"
+        app:layout_constraintBottom_toTopOf="@+id/mapsView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mToolbar">

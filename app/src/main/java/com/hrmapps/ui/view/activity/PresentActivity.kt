@@ -22,13 +22,18 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
 import com.hrmapps.R
 import com.hrmapps.databinding.ActivityPresentBinding
+import kotlin.math.atan2
+import kotlin.math.cos
 import kotlin.math.pow
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 class PresentActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -50,7 +55,6 @@ class PresentActivity : AppCompatActivity(), OnMapReadyCallback {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
         binding.mapView.onCreate(savedInstanceState)
         binding.mapView.getMapAsync(this)
 
@@ -138,10 +142,10 @@ class PresentActivity : AppCompatActivity(), OnMapReadyCallback {
         val radiusOfEarth = 6371000.0  // Radius bumi dalam meter
         val latDistance = Math.toRadians(endP.latitude - startP.latitude)
         val lngDistance = Math.toRadians(endP.longitude - startP.longitude)
-        val a = Math.sin(latDistance / 2).pow(2.0) +
-                Math.cos(Math.toRadians(startP.latitude)) * Math.cos(Math.toRadians(endP.latitude)) *
-                Math.sin(lngDistance / 2).pow(2.0)
-        val c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+        val a = sin(latDistance / 2).pow(2.0) +
+                cos(Math.toRadians(startP.latitude)) * Math.cos(Math.toRadians(endP.latitude)) *
+                sin(lngDistance / 2).pow(2.0)
+        val c = 2 * atan2(sqrt(a), sqrt(1 - a))
         return radiusOfEarth * c
     }
 

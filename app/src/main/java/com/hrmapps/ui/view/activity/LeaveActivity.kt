@@ -27,6 +27,10 @@ class LeaveActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        binding.mToolbar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
         val leaveList = listOf(
             Leave("01 Jan 2024", "05 Jan 2024", "Sakit", "Alasan cuti karena sakit demam."),
             Leave("12 Feb 2024", "16 Feb 2024", "Libur", "Liburan keluarga.")

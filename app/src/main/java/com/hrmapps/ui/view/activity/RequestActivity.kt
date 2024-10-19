@@ -30,7 +30,7 @@ class RequestActivity : AppCompatActivity() {
         }
         setSupportActionBar(binding.mToolbar)
         binding.mToolbar.setNavigationOnClickListener {
-            finish()
+            onBackPressedDispatcher.onBackPressed()
         }
 
         val jobList = listOf(

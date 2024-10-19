@@ -1,5 +1,4 @@
 <resources>
     <string name="app_name">HRM Apps</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="apiKey">AIzaSyCBG4la8IQUuxwVXMlB4OV5CINHhcY2iGo</string>
 </resources>

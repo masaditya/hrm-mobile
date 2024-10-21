@@ -7,13 +7,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.view.activity.JobDetailActivity">
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/mToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/primary_dark"
-        app:title="Detail Pekerjaan"
+        app:layout_constraintStart_toStartOf="parent"
 
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="Detail Pekerjaan"
         app:titleTextColor="@color/white" />
 
     <TextView

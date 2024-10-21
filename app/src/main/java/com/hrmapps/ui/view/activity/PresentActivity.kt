@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
 import android.provider.MediaStore
@@ -29,6 +30,8 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
 import com.hrmapps.R
 import com.hrmapps.databinding.ActivityPresentBinding
+import java.io.IOException
+import java.util.Locale
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.pow
@@ -79,6 +82,46 @@ class PresentActivity : AppCompatActivity(), OnMapReadyCallback {
             onBackPressedDispatcher.onBackPressed()
         }
 
+    }
+    private fun getCurrentLocation() {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+        fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+            location?.let {
+                val latLng = LatLng(it.latitude, it.longitude)
+                setAddressFromLocation(it.latitude, it.longitude)
+            }
+        }
+    }
+    private fun setAddressFromLocation(latitude: Double, longitude: Double) {
+        val geocoder = Geocoder(this, Locale.getDefault())
+        try {
+            val addresses = geocoder.getFromLocation(latitude, longitude, 1)
+            if (addresses != null && addresses.isNotEmpty()) {
+                val address = addresses[0].getAddressLine(0)
+                binding.etAddress.setText(address)
+            } else {
+                binding.etAddress.setText("Unable to get address")
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+            binding.etAddress.setText("Geocoder failed")
+        }
     }
 
     override fun onMapReady(googleMap: GoogleMap) {

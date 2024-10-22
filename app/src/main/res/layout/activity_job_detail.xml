@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:background="@color/primary_dark"
         app:layout_constraintStart_toStartOf="parent"
-
+        app:navigationIcon="@drawable/ic_back"
         app:layout_constraintTop_toTopOf="parent"
         app:title="Detail Pekerjaan"
         app:titleTextColor="@color/white" />

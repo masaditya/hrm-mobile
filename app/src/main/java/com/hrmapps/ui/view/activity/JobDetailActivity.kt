@@ -25,6 +25,9 @@ class JobDetailActivity : AppCompatActivity() {
             insets
         }
 
+        binding.mToolbar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
 
         val position = intent.getStringExtra("position")
         val startDate = intent.getStringExtra("startDate")

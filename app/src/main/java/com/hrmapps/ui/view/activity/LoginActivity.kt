@@ -32,8 +32,6 @@ class LoginActivity : AppCompatActivity() {
             setCancelable(false)
         }
 
-
-
         binding.btnLogin.setOnClickListener {
             val email = binding.etEmail.text.toString().trim()
             val password = binding.etPassword.text.toString().trim()

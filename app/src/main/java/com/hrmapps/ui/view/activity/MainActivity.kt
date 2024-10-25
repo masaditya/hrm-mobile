@@ -1,6 +1,7 @@
 package com.hrmapps.ui.view.activity
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -64,6 +65,13 @@ class MainActivity : AppCompatActivity() {
 
         binding.bottomNavigation.show(2)
         loadFragment(HomeFragment())
+
+        binding.civUser.setOnClickListener {
+            startActivity(Intent(this, ProfileActivity::class.java))
+        }
+        binding.llProfile.setOnClickListener {
+            startActivity(Intent(this, ProfileActivity::class.java))
+        }
     }
     private fun loadFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()

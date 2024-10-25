@@ -12,8 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/primary_dark"
-        android:title="Edit Profile"
-        android:titleTextColor="@color/white"
+        app:title="Edit Profile"
+        app:titleTextColor="@color/white"
         app:navigationIcon="@drawable/ic_back"
         app:layout_constraintTop_toTopOf="parent" />
 

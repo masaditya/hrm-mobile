@@ -1,13 +1,17 @@
 package com.hrmapps.ui.view.activity
 
 import android.app.ProgressDialog
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.hrmapps.R
 import com.hrmapps.data.api.RetrofitBuilder
@@ -21,6 +25,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private lateinit var progressDialog: ProgressDialog
     private lateinit var authViewModel: AuthViewModel
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,9 +33,13 @@ class LoginActivity : AppCompatActivity() {
 
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        sharedPreferences = getSharedPreferences("isLoggedIn", MODE_PRIVATE)
+
         val apiService = RetrofitBuilder.apiService
         val authRepository = AuthRepository(apiService)
-        authViewModel = ViewModelProvider(this, AuthViewModelFactory(authRepository)).get(AuthViewModel::class.java)
+
+        authViewModel = ViewModelProvider(this, AuthViewModelFactory(authRepository))[AuthViewModel::class.java]
 
         progressDialog = ProgressDialog(this).apply {
             setMessage("Loading...")
@@ -49,10 +58,22 @@ class LoginActivity : AppCompatActivity() {
 
             if (validateInput(email, password)) {
                 progressDialog.show()
-                performLogin(email, password)
+                authViewModel.login(email, password)
             }
         }
-
+        authViewModel.loginResponse.observe(this, Observer { response ->
+            progressDialog.dismiss()
+            Log.d("LoginResponse", "Response: $response")
+            if (response != null && response.message == "Login successful") {
+                startActivity(Intent(this, MainActivity::class.java))
+                sharedPreferences.edit().putBoolean("isLoggedIn", true).apply()
+                sharedPreferences.edit().putString("token", response.token).apply()
+                finish()
+                Toast.makeText(this, "Login sukses! Token: ${response.token}", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Login gagal, periksa kredensial Anda", Toast.LENGTH_SHORT).show()
+            }
+        })
         binding.tvForgotPassword.setOnClickListener {
             Toast.makeText(this, "Forgot Password diklik", Toast.LENGTH_SHORT).show()
         }
@@ -84,14 +105,5 @@ class LoginActivity : AppCompatActivity() {
         return isValid
     }
 
-    private fun performLogin(email: String, password: String) {
-        authViewModel.login(email, password).observe(this) { response ->
-            progressDialog.dismiss()
-            if (response != null) {
-                Toast.makeText(this, "Login sukses! Token: ${response.token}", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "Login gagal, periksa kredensial Anda", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
+
 }

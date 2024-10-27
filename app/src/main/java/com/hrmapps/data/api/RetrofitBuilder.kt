@@ -5,20 +5,25 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+
 object RetrofitBuilder {
-    private const val BASE_URL = "https://hrm.dexotic.io/api/"
+    private const val BASE_URL = "https://hrm.dexotic.io/"
 
     private val retrofit: Retrofit by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
-            .client(
-                OkHttpClient.Builder().apply {
-                    addInterceptor(HttpLoggingInterceptor().apply {
-                        level = HttpLoggingInterceptor.Level.BODY
-                    })
-                }.build()
-            )
+            .client(createOkHttpClient())
+            .build()
+    }
+
+    private fun createOkHttpClient(): OkHttpClient {
+        val loggingInterceptor = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+
+        return OkHttpClient.Builder()
+            .addInterceptor(loggingInterceptor)
             .build()
     }
 

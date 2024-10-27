@@ -4,13 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.hrmapps.data.repository.AuthRepository
 
-@Suppress("UNCHECKED_CAST")
-class AuthViewModelFactory(private val repository: AuthRepository) : ViewModelProvider.Factory {
+class AuthViewModelFactory(private val authRepository: AuthRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return if (modelClass.isAssignableFrom(AuthViewModel::class.java)) {
-            AuthViewModel(repository) as T
-        } else {
-            throw IllegalArgumentException("Unknown ViewModel class")
+        if (modelClass.isAssignableFrom(AuthViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return AuthViewModel(authRepository) as T
         }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

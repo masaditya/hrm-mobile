@@ -34,7 +34,7 @@ data class User(
     val pm_type: String?,
     val pm_last_four: String?,
     val trial_ends_at: String?,
-    val headers: Headers,
+    val headers: String,
     val register_ip: String,
     val location_details: String?,
     val inactive_date: String?,

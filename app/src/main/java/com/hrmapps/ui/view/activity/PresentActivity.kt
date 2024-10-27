@@ -13,6 +13,8 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -46,6 +48,7 @@ class PresentActivity : AppCompatActivity(), OnMapReadyCallback {
     private val REQUEST_IMAGE_CAPTURE = 1
     private lateinit var officeLocation: LatLng
     private val LOCATION_PERMISSION_REQUEST_CODE = 2
+    private lateinit var cameraLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +63,17 @@ class PresentActivity : AppCompatActivity(), OnMapReadyCallback {
         }
         binding.mapView.onCreate(savedInstanceState)
         binding.mapView.getMapAsync(this)
+        cameraLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val imageBitmap = result.data?.extras?.get("data") as Bitmap
+                binding.imgPreview.setImageBitmap(imageBitmap)
+                binding.imgPreview.visibility = View.VISIBLE
+                binding.reSelfie.visibility = View.VISIBLE
+            }else{
+                finish()
+            }
 
+        }
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {

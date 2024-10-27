@@ -25,24 +25,21 @@ class ProfileActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
+        binding.toolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.editProfile -> {
+                    val intent = Intent(this, EditProfileActivity::class.java)
+                    startActivity(intent)
+                    true
+                    }
+                else -> false
+            }
+        }
         binding.toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
 
     }
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.edit_menu, menu)
-        return true
-    }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.editProfile -> {
-                startActivity(Intent(this, EditProfileActivity::class.java))
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
+
 }

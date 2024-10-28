@@ -1,9 +1,12 @@
 package com.hrmapps.ui.view.activity
 
+import android.annotation.SuppressLint
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.provider.Settings
 import android.text.TextUtils
 import android.util.Log
 import android.widget.Toast
@@ -19,6 +22,7 @@ import com.hrmapps.data.repository.AuthRepository
 import com.hrmapps.databinding.ActivityLoginBinding
 import com.hrmapps.ui.viewmodel.AuthViewModel
 import com.hrmapps.ui.viewmodel.AuthViewModelFactory
+import com.hrmapps.utils.getAndroidId
 
 class LoginActivity : AppCompatActivity() {
 
@@ -27,6 +31,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var authViewModel: AuthViewModel
     private lateinit var sharedPreferences: SharedPreferences
 
+    @SuppressLint("HardwareIds")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -55,10 +60,10 @@ class LoginActivity : AppCompatActivity() {
         binding.btnLogin.setOnClickListener {
             val email = binding.etEmail.text.toString().trim()
             val password = binding.etPassword.text.toString().trim()
-
+            val androidId = getAndroidId(this)
             if (validateInput(email, password)) {
                 progressDialog.show()
-                authViewModel.login(email, password)
+                authViewModel.login(email, password, androidId)
             }
         }
         authViewModel.loginResponse.observe(this, Observer { response ->

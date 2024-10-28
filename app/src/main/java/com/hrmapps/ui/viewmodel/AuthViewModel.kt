@@ -18,9 +18,12 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
     private val _loginResponse = MutableLiveData<LoginResponse?>()
     val loginResponse: LiveData<LoginResponse?> get() = _loginResponse
 
-    fun login(email: String, password: String) {
+    private val _logoutResult = MutableLiveData<Result<Boolean>>()
+    val logoutResult: LiveData<Result<Boolean>> get() = _logoutResult
+
+    fun login(email: String, password: String, androidId: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            authRepository.login(email, password).enqueue(object : Callback<LoginResponse> {
+            authRepository.login(email, password, androidId).enqueue(object : Callback<LoginResponse> {
                 override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                     if (response.isSuccessful) {
                         _loginResponse.postValue(response.body())
@@ -33,6 +36,12 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
                     _loginResponse.postValue(null) // Menangani kesalahan
                 }
             })
+        }
+    }
+
+    fun logout(token: String) {
+        authRepository.logout(token).observeForever { result ->
+            _logoutResult.value = result
         }
     }
 }

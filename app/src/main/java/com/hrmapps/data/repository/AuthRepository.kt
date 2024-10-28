@@ -36,23 +36,5 @@ class AuthRepository(private val apiService: ApiService) {
         return result
     }
 
-    fun logout(token: String): LiveData<Result<Boolean>> {
-        val result = MutableLiveData<Result<Boolean>>()
 
-        apiService.logout("Bearer $token").enqueue(object : Callback<Void> {
-            override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                if (response.isSuccessful) {
-                    result.value = Result.success(true)
-                } else {
-                    result.value = Result.failure(Throwable("Logout failed"))
-                }
-            }
-
-            override fun onFailure(call: Call<Void>, t: Throwable) {
-                result.value = Result.failure(t)
-            }
-        })
-
-        return result
-    }
 }

@@ -85,8 +85,8 @@ class ProfileActivity : AppCompatActivity() {
         authViewModel.logoutResult.observe(this, Observer { result ->
             when {
                 result.isSuccess -> {
+                    sharedPreferences.edit().clear().apply()
                     sharedPreferences.edit().putBoolean("isLoggedIn", false).apply()
-                    sharedPreferences.edit().remove("token").apply()
                     val intent = Intent(this, LoginActivity::class.java)
                     startActivity(intent)
                     finish()

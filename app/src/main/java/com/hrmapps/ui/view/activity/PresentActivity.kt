@@ -3,8 +3,10 @@ package com.hrmapps.ui.view.activity
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
@@ -18,8 +20,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -31,8 +35,17 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
 import com.hrmapps.R
+import com.hrmapps.data.api.RetrofitBuilder
+import com.hrmapps.data.repository.CheckInRepository
 import com.hrmapps.databinding.ActivityPresentBinding
+import com.hrmapps.ui.viewmodel.CheckInViewModel
+import com.hrmapps.ui.viewmodel.CheckInViewModelFactory
+import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
+import java.net.URL
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 import kotlin.math.atan2
 import kotlin.math.cos
@@ -45,9 +58,16 @@ class PresentActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityPresentBinding
     private lateinit var mMap: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private val REQUEST_IMAGE_CAPTURE = 1
     private lateinit var officeLocation: LatLng
     private val LOCATION_PERMISSION_REQUEST_CODE = 2
+    private lateinit var viewModel: CheckInViewModel
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var token: String
+    private lateinit var bitmap: Bitmap
+    private val REQUEST_IMAGE_CAPTURE = 1
+    private lateinit var latitude: String
+    private lateinit var longitude: String
+    private var workFromType: String = ""
     private lateinit var cameraLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,27 +81,32 @@ class PresentActivity : AppCompatActivity(), OnMapReadyCallback {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        binding.mapView.onCreate(savedInstanceState)
-        binding.mapView.getMapAsync(this)
+
         cameraLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val imageBitmap = result.data?.extras?.get("data") as Bitmap
                 binding.imgPreview.setImageBitmap(imageBitmap)
                 binding.imgPreview.visibility = View.VISIBLE
                 binding.reSelfie.visibility = View.VISIBLE
-            }else{
-                finish()
             }
-
         }
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        val apiService = RetrofitBuilder.apiService
+        val repository = CheckInRepository(apiService)
+        val factory = CheckInViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, factory)[CheckInViewModel::class.java]
 
+        binding.mapView.onCreate(savedInstanceState)
+        binding.mapView.getMapAsync(this)
+
+        sharedPreferences = getSharedPreferences("isLoggedIn", MODE_PRIVATE)
+        token = sharedPreferences.getString("token", "").toString()
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), REQUEST_IMAGE_CAPTURE)
         } else {
             openCamera()
         }
-
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
         } else {
@@ -94,6 +119,34 @@ class PresentActivity : AppCompatActivity(), OnMapReadyCallback {
         binding.mToolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
+        binding.powerSpinnerView2.setItems(resources.getStringArray(R.array.working_locations).toList())
+        binding.powerSpinnerView2.setOnSpinnerItemSelectedListener<String> { oldIndex, oldItem, newIndex, newItem ->
+            workFromType = newItem
+        }
+
+        binding.btnCheckIn.setOnClickListener {
+            val clockInTime = getCurrentDateTimeFormatted()
+            val photo = binding.imgPreview.drawable?.toBitmap()?.let { bitmapToFile(it) }
+            if (photo == null) {
+                Toast.makeText(this, "Photo not found, please take a selfie", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+
+            val companyId = sharedPreferences.getString("companyId", "").toString()
+            val userId = sharedPreferences.getString("userId", "").toString()
+            val clockInIp = sharedPreferences.getString("registerIp", "")
+            if (clockInIp != null) {
+                if (workFromType.isEmpty() || clockInIp.isEmpty()){
+                    Toast.makeText(this, "Please select a work location", Toast.LENGTH_SHORT).show()
+                }else{
+                    viewModel.checkIn(companyId, userId, clockInTime, "0", clockInIp, "no", latitude, longitude, workFromType, "yes", photo, token)
+                }
+            }
+
+        }
+        getCurrentLocation()
+        observeViewModel()
 
     }
     private fun getCurrentLocation() {
@@ -117,6 +170,9 @@ class PresentActivity : AppCompatActivity(), OnMapReadyCallback {
         fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
             location?.let {
                 val latLng = LatLng(it.latitude, it.longitude)
+                latitude = it.latitude.toString()
+                longitude = it.longitude.toString()
+
                 setAddressFromLocation(it.latitude, it.longitude)
             }
         }
@@ -125,7 +181,7 @@ class PresentActivity : AppCompatActivity(), OnMapReadyCallback {
         val geocoder = Geocoder(this, Locale.getDefault())
         try {
             val addresses = geocoder.getFromLocation(latitude, longitude, 1)
-            if (addresses != null && addresses.isNotEmpty()) {
+            if (!addresses.isNullOrEmpty()) {
                 val address = addresses[0].getAddressLine(0)
                 binding.etAddress.setText(address)
             } else {
@@ -136,22 +192,6 @@ class PresentActivity : AppCompatActivity(), OnMapReadyCallback {
             binding.etAddress.setText("Geocoder failed")
         }
     }
-
-    override fun onMapReady(googleMap: GoogleMap) {
-        mMap = googleMap
-        officeLocation = LatLng(-7.380462720372436, 112.72159771226829)  // Sesuaikan koordinat kantor
-        mMap.addMarker(MarkerOptions().position(officeLocation).title("Office"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(officeLocation, 18f))
-
-        val circleOptions = CircleOptions()
-            .center(officeLocation)
-            .radius(100.0)  // Radius dalam meter
-            .strokeColor(0x220000FF)
-            .fillColor(0x220000FF)
-            .strokeWidth(2f)
-        mMap.addCircle(circleOptions)
-    }
-
     private fun openCamera() {
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         if (takePictureIntent.resolveActivity(packageManager) != null) {
@@ -171,6 +211,22 @@ class PresentActivity : AppCompatActivity(), OnMapReadyCallback {
             binding.reSelfie.visibility = View.VISIBLE
         }
     }
+    override fun onMapReady(googleMap: GoogleMap) {
+        mMap = googleMap
+        officeLocation = LatLng(-7.134813414258406, 112.71336689058306)  // Sesuaikan koordinat kantor
+        mMap.addMarker(MarkerOptions().position(officeLocation).title("Office"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(officeLocation, 18f))
+
+        val circleOptions = CircleOptions()
+            .center(officeLocation)
+            .radius(100.0)  // Radius dalam meter
+            .strokeColor(0x220000FF)
+            .fillColor(0x220000FF)
+            .strokeWidth(2f)
+        mMap.addCircle(circleOptions)
+    }
+
+
 
     private fun checkUserLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -203,6 +259,46 @@ class PresentActivity : AppCompatActivity(), OnMapReadyCallback {
                 sin(lngDistance / 2).pow(2.0)
         val c = 2 * atan2(sqrt(a), sqrt(1 - a))
         return radiusOfEarth * c
+    }
+
+    private fun observeViewModel() {
+        viewModel.checkInResponse.observe(this) { response ->
+            if (response != null) {
+                Toast.makeText(this, "Check-in successful", Toast.LENGTH_SHORT).show()
+                finish()
+            } else {
+                Toast.makeText(this, "Check-in failed", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+    private fun bitmapToFile(bitmap: Bitmap): File? {
+        val file = File(cacheDir, "${System.currentTimeMillis()}.jpg")
+        file.createNewFile()
+
+        var quality = 100
+        var outputStream: FileOutputStream? = null
+        var sizeInBytes: Long
+
+        do {
+            outputStream = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream)
+            outputStream.flush()
+            sizeInBytes = file.length()
+            outputStream.close()
+            quality -= 10
+        } while (sizeInBytes > 1 * 1024 * 1024 && quality > 0)
+
+        return if (sizeInBytes <= 1 * 1024 * 1024) {
+            file
+        } else {
+            Log.e("BitmapError", "Bitmap is too large to be compressed under 1 MB.")
+            null
+        }
+    }
+
+    private fun getCurrentDateTimeFormatted(): String {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        return dateFormat.format(Date())
     }
 
     override fun onResume() {

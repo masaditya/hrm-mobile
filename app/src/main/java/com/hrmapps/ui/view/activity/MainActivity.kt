@@ -2,6 +2,7 @@ package com.hrmapps.ui.view.activity
 
 import android.Manifest
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -24,6 +25,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private val CAMERA_PERMISSION_CODE = 100
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +37,9 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        sharedPreferences = getSharedPreferences("isLoggedIn", MODE_PRIVATE)
+
         checkCameraPermission()
 
         binding.bottomNavigation.add(
@@ -72,11 +77,16 @@ class MainActivity : AppCompatActivity() {
         binding.llProfile.setOnClickListener {
             startActivity(Intent(this, ProfileActivity::class.java))
         }
+        setupUI()
     }
     private fun loadFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragmentContainer, fragment)
             .commit()
+    }
+    private fun setupUI() {
+        binding.tvUserName.text = sharedPreferences.getString("name", "")
+        binding.tvEmail.text = sharedPreferences.getString("email", "")
     }
 
     private fun checkCameraPermission() {

@@ -63,7 +63,7 @@ class LoginActivity : AppCompatActivity() {
             val androidId = getAndroidId(this)
             if (validateInput(email, password)) {
                 progressDialog.show()
-                authViewModel.login(email, password, androidId)
+                authViewModel.login(email, password, "22-666666-666666-1")
             }
         }
         authViewModel.loginResponse.observe(this, Observer { response ->
@@ -73,6 +73,12 @@ class LoginActivity : AppCompatActivity() {
                 startActivity(Intent(this, MainActivity::class.java))
                 sharedPreferences.edit().putBoolean("isLoggedIn", true).apply()
                 sharedPreferences.edit().putString("token", response.token).apply()
+                sharedPreferences.edit().putString("companyId", response.user.company_id.toString()).apply()
+                sharedPreferences.edit().putString("userId", response.user.id.toString()).apply()
+                sharedPreferences.edit().putString("name", response.user.name).apply()
+                sharedPreferences.edit().putString("email", response.user.email).apply()
+                sharedPreferences.edit().putString("registerIp", response.user.register_ip).apply()
+
                 finish()
                 Toast.makeText(this, "Login sukses! Token: ${response.token}", Toast.LENGTH_SHORT).show()
             } else {

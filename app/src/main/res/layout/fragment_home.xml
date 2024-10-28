@@ -102,6 +102,7 @@
             app:layout_constraintTop_toBottomOf="@+id/imageView2">
 
             <TextView
+                android:id="@+id/tvCheckIn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Check In"
@@ -117,6 +118,7 @@
                 android:background="@color/white" />
 
             <TextView
+                android:id="@+id/tvCheckOut"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Check Out"

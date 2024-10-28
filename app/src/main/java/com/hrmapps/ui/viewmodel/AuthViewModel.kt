@@ -31,9 +31,8 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
                         _loginResponse.postValue(null)
                     }
                 }
-
                 override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                    _loginResponse.postValue(null) // Menangani kesalahan
+                    _loginResponse.postValue(null)
                 }
             })
         }

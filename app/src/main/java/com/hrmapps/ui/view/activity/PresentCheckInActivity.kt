@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
@@ -29,7 +28,6 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
@@ -43,7 +41,6 @@ import com.hrmapps.ui.viewmodel.CheckInViewModelFactory
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -53,7 +50,7 @@ import kotlin.math.pow
 import kotlin.math.sin
 import kotlin.math.sqrt
 
-class PresentActivity : AppCompatActivity(), OnMapReadyCallback {
+class PresentCheckInActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var binding: ActivityPresentBinding
     private lateinit var mMap: GoogleMap

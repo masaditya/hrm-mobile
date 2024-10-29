@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/radial_gradient_circle"
-    tools:context=".ui.view.activity.PresentActivity">
+    tools:context=".ui.view.activity.PresentCheckInActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/mToolbar"
@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:title="Present"
+        app:title="Present-CheckIn"
         android:elevation="10dp"
         app:titleTextColor="@color/white"
         app:navigationIcon="@drawable/ic_back" />

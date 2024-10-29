@@ -53,7 +53,7 @@
             android:name=".ui.view.activity.LeaveActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.view.activity.PresentActivity"
+            android:name=".ui.view.activity.PresentCheckInActivity"
             android:exported="false" />
         <activity
             android:name=".ui.view.activity.SplashScreenActivity"

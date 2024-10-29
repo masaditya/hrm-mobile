@@ -2,6 +2,8 @@ package com.hrmapps.data.api
 
 import androidx.lifecycle.LiveData
 import com.hrmapps.data.model.response.CheckInResponse
+import com.hrmapps.data.model.response.CheckInStatusResponse
+import com.hrmapps.data.model.response.GetUserResponse
 import com.hrmapps.data.model.response.LoginResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -11,6 +13,7 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
+import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
@@ -40,8 +43,13 @@ interface ApiService {
         @Part photo: MultipartBody.Part
     ): CheckInResponse
 
+    @GET("api/user-logged")
+    fun getUserLogin(
+        @Header("Authorization") token: String,
+    ): Call<GetUserResponse>
+
     fun getCheckInStatus(
         @Header("Authorization") token: String,
         @Query("user_id") userId: Int
-    ): Call<ResponseBody>
+    ): Call<CheckInStatusResponse>
 }

@@ -14,11 +14,17 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.hrmapps.BuildConfig
 import com.hrmapps.R
+import com.hrmapps.data.api.RetrofitBuilder
+import com.hrmapps.data.repository.AuthRepository
 import com.hrmapps.databinding.ActivityMainBinding
 import com.hrmapps.ui.view.fragment.HistoryFragment
 import com.hrmapps.ui.view.fragment.HomeFragment
+import com.hrmapps.ui.viewmodel.AuthViewModel
+import com.hrmapps.ui.viewmodel.AuthViewModelFactory
+import com.hrmapps.ui.viewmodel.CheckInStatusViewModel
 import com.qamar.curvedbottomnaviagtion.CurvedBottomNavigation
 
 class MainActivity : AppCompatActivity() {
@@ -106,7 +112,6 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
-
 
     override fun onRequestPermissionsResult(
         requestCode: Int,

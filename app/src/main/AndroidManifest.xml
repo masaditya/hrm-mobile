@@ -26,7 +26,7 @@
         android:theme="@style/Theme.HRMApps"
         tools:targetApi="tiramisu">
         <activity
-            android:name=".ui.view.activity.CameraActivity"
+            android:name=".ui.view.activity.PresentCheckOutActivity"
             android:exported="false" />
         <activity
             android:name=".ui.view.activity.MainActivity"

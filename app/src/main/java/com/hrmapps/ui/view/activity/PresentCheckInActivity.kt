@@ -35,7 +35,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.hrmapps.R
 import com.hrmapps.data.api.RetrofitBuilder
 import com.hrmapps.data.repository.CheckInRepository
-import com.hrmapps.databinding.ActivityPresentBinding
+import com.hrmapps.databinding.ActivityPresentCheckInBinding
 import com.hrmapps.ui.viewmodel.CheckInViewModel
 import com.hrmapps.ui.viewmodel.CheckInViewModelFactory
 import java.io.File
@@ -52,7 +52,7 @@ import kotlin.math.sqrt
 
 class PresentCheckInActivity : AppCompatActivity(), OnMapReadyCallback {
 
-    private lateinit var binding: ActivityPresentBinding
+    private lateinit var binding: ActivityPresentCheckInBinding
     private lateinit var mMap: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var officeLocation: LatLng
@@ -70,7 +70,7 @@ class PresentCheckInActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        binding = ActivityPresentBinding.inflate(layoutInflater)
+        binding = ActivityPresentCheckInBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -210,7 +210,7 @@ class PresentCheckInActivity : AppCompatActivity(), OnMapReadyCallback {
     }
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        officeLocation = LatLng(-7.134813414258406, 112.71336689058306)  // Sesuaikan koordinat kantor
+        officeLocation = LatLng(-7.3036041108331755, 111.95451539998164)  // Sesuaikan koordinat kantor
         mMap.addMarker(MarkerOptions().position(officeLocation).title("Office"))
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(officeLocation, 18f))
 

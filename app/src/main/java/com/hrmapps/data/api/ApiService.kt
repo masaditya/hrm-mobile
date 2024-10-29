@@ -48,6 +48,7 @@ interface ApiService {
         @Header("Authorization") token: String,
     ): Call<GetUserResponse>
 
+    @GET("api/attendance/check")
     fun getCheckInStatus(
         @Header("Authorization") token: String,
         @Query("user_id") userId: Int

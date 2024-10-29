@@ -19,12 +19,15 @@ import com.hrmapps.BuildConfig
 import com.hrmapps.R
 import com.hrmapps.data.api.RetrofitBuilder
 import com.hrmapps.data.repository.AuthRepository
+import com.hrmapps.data.repository.GetUserRepository
 import com.hrmapps.databinding.ActivityMainBinding
 import com.hrmapps.ui.view.fragment.HistoryFragment
 import com.hrmapps.ui.view.fragment.HomeFragment
 import com.hrmapps.ui.viewmodel.AuthViewModel
 import com.hrmapps.ui.viewmodel.AuthViewModelFactory
 import com.hrmapps.ui.viewmodel.CheckInStatusViewModel
+import com.hrmapps.ui.viewmodel.GetUserLoginViewModel
+import com.hrmapps.ui.viewmodel.GetUserLoginViewModelFactory
 import com.qamar.curvedbottomnaviagtion.CurvedBottomNavigation
 
 class MainActivity : AppCompatActivity() {
@@ -32,6 +35,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val CAMERA_PERMISSION_CODE = 100
     private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var viewModel: GetUserLoginViewModel
+    private lateinit var viewModelFactory: GetUserLoginViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +48,10 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        val apiService = RetrofitBuilder.apiService
+        val getUserRepository = GetUserRepository(apiService)
+        viewModelFactory = GetUserLoginViewModelFactory(getUserRepository)
+        viewModel = ViewModelProvider(this, viewModelFactory)[GetUserLoginViewModel::class.java]
 
         sharedPreferences = getSharedPreferences("isLoggedIn", MODE_PRIVATE)
 
@@ -91,9 +100,25 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
     private fun setupUI() {
-        binding.tvUserName.text = sharedPreferences.getString("name", "")
-        binding.tvEmail.text = sharedPreferences.getString("email", "")
+        val token = sharedPreferences.getString("token", "").toString()
+
+        viewModel.getUserLogin(token)
+
+        viewModel.userResponse.observe(this) { response ->
+            val user = response.data
+            if (user != null) {
+                binding.tvUserName.text = user.name
+                binding.tvEmail.text = user.email
+            } else {
+                Toast.makeText(this, "Gagal mengambil data pengguna", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        viewModel.error.observe(this) { errorMessage ->
+            Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
+        }
     }
+
 
     private fun checkCameraPermission() {
         if (ContextCompat.checkSelfPermission(

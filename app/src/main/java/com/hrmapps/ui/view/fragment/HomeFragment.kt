@@ -23,6 +23,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.airbnb.lottie.LottieAnimationView
+import com.airbnb.lottie.LottieCompositionFactory
 import com.hrmapps.R
 import com.hrmapps.data.api.RetrofitBuilder
 import com.hrmapps.data.repository.CheckInStatusRepository
@@ -116,7 +118,7 @@ class HomeFragment : Fragment() {
             val isCheckInDone = binding.tvCheckIn.text
             val isCheckOutDone = binding.tvCheckOut.text
 
-            if (isCheckInDone != "Check In" && isCheckOutDone == "Check Out") {
+            if (isCheckInDone != "Check In" && isCheckOutDone != "Check Out") {
                 Toast.makeText(requireContext(), "Anda sudah melakukan absen hari ini", Toast.LENGTH_LONG).show()
             } else {
                 if (binding.tvPresent.text == "Check Out") {
@@ -180,6 +182,9 @@ class HomeFragment : Fragment() {
         checkOutViewModel.checkOutResponse.observe(viewLifecycleOwner){ response ->
             if (response != null) {
                 showCheckOutResultDialog(true)
+                val clockCheckOut = response.data.clock_out_time
+                val clockOutTime = getHourFromDateString(clockCheckOut)
+                binding.tvCheckOut.text = "Check Out : $clockOutTime"
             } else {
                 Toast.makeText(requireContext(), "Check-out failed", Toast.LENGTH_SHORT).show()
                 showCheckOutResultDialog(false)
@@ -191,11 +196,13 @@ class HomeFragment : Fragment() {
         }
         checkOutViewModel.isLoading.observe(viewLifecycleOwner, Observer { isLoading ->
             if (isLoading) {
-                binding.layout.visibility = View.GONE
                 binding.loadingBar.visibility = View.VISIBLE
+                binding.layout.visibility = View.GONE
+
             } else {
-                binding.layout.visibility = View.VISIBLE
                 binding.loadingBar.visibility = View.GONE
+                binding.layout.visibility = View.VISIBLE
+
             }
         })
 
@@ -245,6 +252,7 @@ class HomeFragment : Fragment() {
             }
 
             observeCheckOut()
+            observeCheckStatus()
         }
         builder.setNegativeButton("No") { dialog, which ->
             dialog.dismiss()
@@ -257,21 +265,32 @@ class HomeFragment : Fragment() {
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_checkout_result, null)
         dialog.setContentView(dialogView)
 
-        val ivStatusIcon = dialogView.findViewById<ImageView>(R.id.ivStatusIcon)
+        val ivStatusIcon = dialogView.findViewById<LottieAnimationView>(R.id.ivStatusIcon)
         val tvStatusMessage = dialogView.findViewById<TextView>(R.id.tvStatusMessage)
         val tvDetailedMessage = dialogView.findViewById<TextView>(R.id.tvDetailedMessage)
         val tvClose = dialogView.findViewById<TextView>(R.id.tvClose)
 
         if (isSuccess) {
             binding.tvPresent.text = "Check In"
-            ivStatusIcon.setImageResource(R.drawable.ic_success_circle)
+            LottieCompositionFactory.fromRawRes(requireContext(), R.raw.success).addListener { composition ->
+                ivStatusIcon.setComposition(composition)
+                ivStatusIcon.playAnimation()
+            }.addFailureListener { e ->
+                Log.e("HomeFragment", "Error loading animation: ${e.message}")
+            }
             tvStatusMessage.text = "Check-out Berhasil!"
             binding.linearLayout4.visibility = View.VISIBLE
             binding.tvCheckOut.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
             tvStatusMessage.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
             tvDetailedMessage.text = "Terima kasih atas dedikasi dan kerja keras Anda hari ini. Semoga istirahat Anda menyenangkan!"
         } else {
-            ivStatusIcon.setImageResource(R.drawable.ic_failed_circle)
+            LottieCompositionFactory.fromRawRes(requireContext(), R.raw.failed).addListener { composition ->
+                ivStatusIcon.setComposition(composition)
+                ivStatusIcon.playAnimation()
+            }.addFailureListener { e ->
+                Log.e("HomeFragment", "Error loading animation: ${e.message}")
+
+            }
             tvStatusMessage.text = "Check-out Gagal"
             tvStatusMessage.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
             tvDetailedMessage.text = "Terjadi masalah saat check-out. Mohon coba lagi nanti atau hubungi tim IT untuk bantuan."
@@ -317,23 +336,6 @@ class HomeFragment : Fragment() {
 
         return String.format("$hours hr $minutes min")
     }
-
-    private fun formatDateString(dateString: String): String {
-        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale.getDefault()).apply {
-            timeZone = TimeZone.getTimeZone("UTC")
-        }
-        val outputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-
-        return try {
-            val date = inputFormat.parse(dateString)
-            outputFormat.format(date!!)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            "Error parsing date"
-        }
-    }
-
-
 
     override fun onResume() {
         super.onResume()

@@ -2,18 +2,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="24dp"
-    android:background="@drawable/bg_dialog_rounded"
+    android:background="@color/primary_dark_second"
     android:elevation="8dp"
     android:gravity="center">
 
-    <ImageView
+    <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/ivStatusIcon"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_speed="1.0"
         android:layout_marginBottom="16dp"
-        android:src="@drawable/ic_success_circle" />
+        app:lottie_rawRes="@raw/success"/>
 
     <TextView
         android:id="@+id/tvStatusMessage"
@@ -21,7 +25,7 @@
         android:layout_height="wrap_content"
         android:text="Success"
         android:textSize="18sp"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:gravity="center"
         android:layout_marginBottom="8dp"
         android:textStyle="bold" />
@@ -32,7 +36,7 @@
         android:layout_height="wrap_content"
         android:text="Terima kasih atas kerja keras Anda hari ini!"
         android:textSize="16sp"
-        android:textColor="@android:color/darker_gray"
+        android:textColor="@android:color/white"
         android:gravity="center"
         android:layout_marginTop="4dp" />
     <TextView
@@ -41,7 +45,7 @@
         android:layout_height="wrap_content"
         android:text="Otomatis close dalam"
         android:textSize="16sp"
-        android:textColor="@android:color/darker_gray"
+        android:textColor="@android:color/white"
         android:gravity="center"
         android:layout_marginTop="4dp" />
 

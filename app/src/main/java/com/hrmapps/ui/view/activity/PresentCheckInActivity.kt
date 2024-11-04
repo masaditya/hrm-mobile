@@ -33,6 +33,8 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
+import com.airbnb.lottie.LottieAnimationView
+import com.airbnb.lottie.LottieCompositionFactory
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -319,18 +321,28 @@ class PresentCheckInActivity : AppCompatActivity(), OnMapReadyCallback {
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_checkin_result, null)
         dialog.setContentView(dialogView)
 
-        val ivStatusIcon = dialogView.findViewById<ImageView>(R.id.ivStatusIcon)
+        val ivStatusIcon = dialogView.findViewById<LottieAnimationView>(R.id.ivStatusIcon)
         val tvStatusMessage = dialogView.findViewById<TextView>(R.id.tvStatusMessage)
         val tvDetailedMessage = dialogView.findViewById<TextView>(R.id.tvDetailedMessage)
         val tvClose = dialogView.findViewById<TextView>(R.id.tvClose)
 
         if (isSuccess) {
-            ivStatusIcon.setImageResource(R.drawable.ic_success_circle)
+            LottieCompositionFactory.fromRawRes(this, R.raw.success).addListener { composition ->
+                ivStatusIcon.setComposition(composition)
+                ivStatusIcon.playAnimation()
+            }.addFailureListener { e ->
+                Log.e("HomeFragment", "Error loading animation: ${e.message}")
+            }
             tvStatusMessage.text = "Check-In Berhasil!"
             tvStatusMessage.setTextColor(ContextCompat.getColor(this, R.color.green))
             tvDetailedMessage.text = "Terima kasih telah melakukan check-in hari ini! Semoga hari Anda menyenangkan!"
         } else {
-            ivStatusIcon.setImageResource(R.drawable.ic_failed_circle)
+            LottieCompositionFactory.fromRawRes(this, R.raw.failed).addListener { composition ->
+                ivStatusIcon.setComposition(composition)
+                ivStatusIcon.playAnimation()
+            }.addFailureListener { e ->
+                Log.e("HomeFragment", "Error loading animation: ${e.message}")
+            }
             tvStatusMessage.text = "Check-In Gagal"
             tvStatusMessage.setTextColor(ContextCompat.getColor(this, R.color.red))
             tvDetailedMessage.text = "Terjadi masalah saat melakukan check-in. Mohon coba lagi nanti atau hubungi tim IT untuk bantuan."

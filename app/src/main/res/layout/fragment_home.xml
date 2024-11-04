@@ -6,9 +6,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/radial_gradient_circle"
     tools:context=".ui.view.fragment.HomeFragment">
-
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/loadingBar"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_speed="1.0"
+        app:lottie_rawRes="@raw/loading" />
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@id/layout"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -452,19 +461,7 @@
 
         </GridLayout>
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/loadingBar"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:lottie_autoPlay="true"
-            app:lottie_loop="true"
-            android:visibility="gone"
-            app:lottie_speed="1.0"
-            app:lottie_rawRes="@raw/loading" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

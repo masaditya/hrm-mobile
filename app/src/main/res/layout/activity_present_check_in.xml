@@ -27,44 +27,44 @@
         android:layout_width="0dp"
         android:layout_height="200dp"
         android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnCheckIn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mToolbar" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/uploadLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:padding="16dp"
         android:background="@drawable/radial_gradient_circle"
-        app:layout_constraintBottom_toTopOf="@+id/mapView"
+        android:padding="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnCheckIn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mToolbar">
+        app:layout_constraintTop_toBottomOf="@+id/mapView">
 
         <ImageView
             android:id="@+id/imgPreview"
             android:layout_width="150dp"
             android:layout_height="200dp"
             android:scaleType="centerCrop"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            tools:layout_editor_absoluteY="16dp" />
 
         <Button
             android:id="@+id/reSelfie"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_marginBottom="152dp"
             android:backgroundTint="@color/primary_dark"
+            android:drawableLeft="@drawable/ic_retry"
+            android:drawableTint="@color/white"
             android:text="Re-take Selfie"
             android:textColor="@color/white"
-            android:layout_margin="16dp"
-            android:drawableTint="@color/white"
-            android:drawableLeft="@drawable/ic_retry"
             android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/imgPreview"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imgPreview" />
+            app:layout_constraintTop_toTopOf="@+id/imgPreview" />
 
         <com.skydoves.powerspinner.PowerSpinnerView
             android:id="@+id/powerSpinnerView2"
@@ -82,10 +82,9 @@
             android:textColor="@color/black"
             android:textColorHint="@color/black"
             android:textSize="16sp"
-            app:spinner_item_array="@array/working_locations"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/reSelfie"
+            app:layout_constraintTop_toBottomOf="@+id/imgPreview"
             app:spinner_arrow_animate="true"
             app:spinner_arrow_animate_duration="200"
             app:spinner_arrow_gravity="end"
@@ -95,6 +94,7 @@
             app:spinner_divider_color="@color/white"
             app:spinner_divider_show="true"
             app:spinner_divider_size="0.4dp"
+            app:spinner_item_array="@array/working_locations"
             app:spinner_item_height="46dp"
             app:spinner_popup_animation="fade"
             app:spinner_popup_background="@color/white"
@@ -104,16 +104,16 @@
             android:id="@+id/etAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginVertical="8dp"
             android:background="@drawable/rounded"
             android:editable="false"
             android:paddingStart="8dp"
             android:paddingTop="8dp"
             android:paddingEnd="8dp"
-            android:layout_marginVertical="8dp"
             android:paddingBottom="8dp"
             android:text="Address"
-            android:textSize="16sp"
             android:textColor="@color/black"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/powerSpinnerView2" />
@@ -130,13 +130,29 @@
         android:drawableTint="@color/white"
         android:textAllCaps="false"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="-20dp"
+        android:layout_marginStart="-16dp"
+        android:layout_marginEnd="-16dp"
         android:paddingHorizontal="24dp"
-        android:paddingVertical="12dp"
+        android:paddingBottom="32dp"
+        android:paddingTop="16dp"
         android:text="Check-in Now"
-        app:cornerRadius="-50dp"
+        app:cornerRadius="50dp"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/loadingBar"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        android:visibility="gone"
+        app:lottie_speed="1.0"
+        app:lottie_rawRes="@raw/loading" />
 </androidx.constraintlayout.widget.ConstraintLayout>

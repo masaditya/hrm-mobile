@@ -1,8 +1,10 @@
 package com.hrmapps.data.api
 
 import androidx.lifecycle.LiveData
+import com.hrmapps.data.model.response.AttendanceResponse
 import com.hrmapps.data.model.response.CheckInResponse
 import com.hrmapps.data.model.response.CheckInStatusResponse
+import com.hrmapps.data.model.response.CheckOutResponse
 import com.hrmapps.data.model.response.GetUserResponse
 import com.hrmapps.data.model.response.LoginResponse
 import okhttp3.MultipartBody
@@ -16,6 +18,7 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Multipart
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.PartMap
@@ -43,6 +46,18 @@ interface ApiService {
         @Part photo: MultipartBody.Part
     ): CheckInResponse
 
+    @FormUrlEncoded
+    @PATCH("api/attendance/checkout")
+     fun checkOut(
+        @Header("Authorization") token: String,
+        @Field("id") id: Int,
+        @Field("user_id") userId: Int,
+        @Field("clock_out_time") clockOutTime: String,
+        @Field("auto_clock_out") autoClockOut: String,
+        @Field("clock_out_ip") clockOutIp: String,
+        @Field("half_day") halfDay: String
+    ): Call<CheckOutResponse>
+
     @GET("api/user-logged")
     fun getUserLogin(
         @Header("Authorization") token: String,
@@ -53,4 +68,14 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Query("user_id") userId: Int
     ): Call<CheckInStatusResponse>
+
+    @GET("api/attendance")
+    suspend fun getAttendance(
+        @Header("Authorization") token: String,
+        @Query("page") page: Int,
+        @Query("limit") limit: Int,
+        @Query("working_from") workingFrom: String,
+        @Query("location_id") locationId: Int,
+        @Query("user_id") userId: Int
+    ): AttendanceResponse
 }

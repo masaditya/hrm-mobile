@@ -68,16 +68,24 @@ class LoginActivity : AppCompatActivity() {
         }
         authViewModel.loginResponse.observe(this, Observer { response ->
             progressDialog.dismiss()
-            Log.d("LoginResponse", "Response: $response")
             if (response != null && response.message == "Login successful") {
                 startActivity(Intent(this, MainActivity::class.java))
                 sharedPreferences.edit().putBoolean("isLoggedIn", true).apply()
                 sharedPreferences.edit().putString("token", response.token).apply()
                 sharedPreferences.edit().putInt("userId", response.user.id).apply()
+                sharedPreferences.edit().putInt("companyId", response.user.company_id).apply()
                 finish()
                 Toast.makeText(this, "Login sukses! Token: ${response.token}", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(this, "Login gagal, periksa kredensial Anda", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+        authViewModel.isLoading.observe(this, Observer { isLoading ->
+            if (isLoading) {
+                progressDialog.show()
+            } else {
+                progressDialog.dismiss()
             }
         })
         binding.tvForgotPassword.setOnClickListener {

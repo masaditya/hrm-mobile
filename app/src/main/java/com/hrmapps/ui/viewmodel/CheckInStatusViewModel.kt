@@ -18,7 +18,11 @@ class CheckInStatusViewModel(private val repository: CheckInStatusRepository) : 
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> get() = _error
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
+
     fun getCheckInStatus(token: String, userId: Int) {
+        _isLoading.value = true
         repository.getCheckInStatus(token, userId).enqueue(object : Callback<CheckInStatusResponse> {
             override fun onResponse(
                 call: Call<CheckInStatusResponse>,
@@ -26,13 +30,16 @@ class CheckInStatusViewModel(private val repository: CheckInStatusRepository) : 
             ) {
                 if (response.isSuccessful) {
                     _checkInStatus.value = response.body()
+                    _isLoading.value = false
                 } else {
                     _error.value = "Error: ${response.message()}"
+                    _isLoading.value = false
                 }
             }
 
             override fun onFailure(call: Call<CheckInStatusResponse>, t: Throwable) {
                 _error.value = "Failure: ${t.message}"
+                _isLoading.value = false
             }
         })
     }

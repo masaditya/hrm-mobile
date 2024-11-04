@@ -1,11 +1,13 @@
 package com.hrmapps.ui.view.activity
 
 import android.Manifest
+import android.app.ProgressDialog
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -43,11 +45,16 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        window.statusBarColor = getColor(R.color.primary_dark_second)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+
         val apiService = RetrofitBuilder.apiService
         val getUserRepository = GetUserRepository(apiService)
         viewModelFactory = GetUserLoginViewModelFactory(getUserRepository)
@@ -106,16 +113,23 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.userResponse.observe(this) { response ->
             val user = response.data
-            if (user != null) {
-                binding.tvUserName.text = user.name
-                binding.tvEmail.text = user.email
-            } else {
-                Toast.makeText(this, "Gagal mengambil data pengguna", Toast.LENGTH_SHORT).show()
-            }
+            binding.tvUserName.text = user.name
+            binding.tvEmail.text = user.email
         }
 
         viewModel.error.observe(this) { errorMessage ->
             Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
+        }
+        viewModel.isLoading.observe(this) { isLoading ->
+            if (isLoading) {
+                binding.shimmerLayout.startShimmer()
+                binding.shimmerLayout.visibility = View.VISIBLE
+                binding.linearLayout.visibility = View.GONE
+            } else {
+                binding.shimmerLayout.stopShimmer()
+                binding.shimmerLayout.visibility = View.GONE
+                binding.linearLayout.visibility = View.VISIBLE
+            }
         }
     }
 

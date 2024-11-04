@@ -69,16 +69,16 @@ dependencies {
     //Spinner
     //noinspection UseTomlInstead
     implementation(libs.powerspinner)
+    // Paging 3
+    implementation(libs.androidx.paging.runtime.ktx)
 
-    // CameraX
-    val cameraxVersion = "1.1.0"
-    implementation("androidx.camera:camera-core:$cameraxVersion")
-    implementation("androidx.camera:camera-camera2:$cameraxVersion")
-    implementation("androidx.camera:camera-lifecycle:$cameraxVersion")
-    implementation("androidx.camera:camera-view:1.0.0-alpha30")
-    implementation("androidx.camera:camera-extensions:$cameraxVersion")
+    implementation(libs.face.detection)
+    implementation(libs.androidx.camera.camera2)
+    implementation(libs.androidx.camera.lifecycle)
+    implementation(libs.androidx.camera.view)
 
-    // ML Kit for Face Detection
-    implementation("com.google.mlkit:face-detection:16.1.5")
-
+    //lottie
+    implementation(libs.lottie)
+    //shimmer
+    implementation(libs.shimmer)
 }

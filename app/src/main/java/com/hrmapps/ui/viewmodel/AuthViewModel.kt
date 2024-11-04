@@ -21,27 +21,36 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
     private val _logoutResult = MutableLiveData<Result<Boolean>>()
     val logoutResult: LiveData<Result<Boolean>> get() = _logoutResult
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
+
     fun login(email: String, password: String, androidId: String) {
         viewModelScope.launch(Dispatchers.IO) {
+            _isLoading.postValue(true)
             authRepository.login(email, password, androidId).enqueue(object : Callback<LoginResponse> {
                 override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                     if (response.isSuccessful) {
                         _loginResponse.postValue(response.body())
+                        _isLoading.postValue(false)
                     } else {
                         _loginResponse.postValue(null)
+                        _isLoading.postValue(false)
                     }
                 }
 
                 override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                    _loginResponse.postValue(null) // Menangani kesalahan
+                    _loginResponse.postValue(null)
+                    _isLoading.postValue(false)
                 }
             })
         }
     }
 
     fun logout(token: String) {
+        _isLoading.value = true
         authRepository.logout(token).observeForever { result ->
             _logoutResult.value = result
+            _isLoading.value = false
         }
     }
 }

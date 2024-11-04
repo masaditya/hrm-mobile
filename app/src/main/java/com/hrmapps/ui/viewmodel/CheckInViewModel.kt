@@ -17,6 +17,9 @@ class CheckInViewModel(private val repository: CheckInRepository) : ViewModel() 
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> get() = _errorMessage
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
+
     fun checkIn(
         companyId: String,
         userId: String,
@@ -32,6 +35,7 @@ class CheckInViewModel(private val repository: CheckInRepository) : ViewModel() 
         token: String
     ) {
         viewModelScope.launch {
+            _isLoading.value = true
             try {
                 val response = repository.checkIn(
                     companyId,
@@ -48,7 +52,9 @@ class CheckInViewModel(private val repository: CheckInRepository) : ViewModel() 
                     token
                 )
                 _checkInResponse.value = response.getOrThrow()
+                _isLoading.value = false
             } catch (e: Exception) {
+                _isLoading.value = false
                 Log.e("CheckInViewModel", "Error during check-in: ${e.message}", e)
                 _errorMessage.value = e.message
             }

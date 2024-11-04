@@ -28,8 +28,7 @@ class SplashScreenActivity : AppCompatActivity() {
         setContentView(binding.root)
         sharedPreferences = getSharedPreferences("isLoggedIn", MODE_PRIVATE)
         val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
-        val token = sharedPreferences.getString("token", "")
-        Log.d("SplashScreenActivity", "Token: $token")
+
         Handler().postDelayed({
             if (isLoggedIn) {
                 binding.progressBar.visibility = View.GONE

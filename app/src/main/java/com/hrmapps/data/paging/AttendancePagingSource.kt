@@ -11,14 +11,13 @@ class AttendancePagingSource(
     private val apiService: ApiService,
     private val token: String,
     private val workingFrom: String,
-    private val locationId: Int,
     private val userId: Int
 ) : PagingSource<Int, AttendanceData>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, AttendanceData> {
         val page = params.key ?: 1
         return try {
-            val response = apiService.getAttendance(token, page, params.loadSize, workingFrom, locationId, userId)
+            val response = apiService.getAttendance("Bearer $token", page, params.loadSize, workingFrom, userId)
             LoadResult.Page(
                 data = response.data ?: emptyList(),
                 prevKey = if (page == 1) null else page - 1,

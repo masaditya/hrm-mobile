@@ -17,13 +17,13 @@
             android:layout_height="22dp"
             android:layout_marginTop="24dp"
             android:gravity="center_horizontal"
-
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
+                android:id="@+id/tvCheckIn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Check In"
@@ -39,6 +39,7 @@
                 android:background="@color/white" />
 
             <TextView
+                android:id="@+id/tvCheckOut"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Check Out"
@@ -58,6 +59,7 @@
             tools:layout_editor_absoluteX="16dp">
 
             <TextView
+                android:id="@+id/tvTotalWorkTimeToday"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="6dp"
@@ -80,6 +82,7 @@
             app:layout_constraintTop_toBottomOf="@+id/linearLayout4">
 
             <TextView
+                android:id="@+id/tvClockIn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -88,6 +91,7 @@
                 android:textSize="16sp" />
 
             <TextView
+                android:id="@+id/tvClockOut"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

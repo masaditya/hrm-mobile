@@ -75,7 +75,6 @@ interface ApiService {
         @Query("page") page: Int,
         @Query("limit") limit: Int,
         @Query("working_from") workingFrom: String,
-        @Query("location_id") locationId: Int,
         @Query("user_id") userId: Int
     ): AttendanceResponse
 }

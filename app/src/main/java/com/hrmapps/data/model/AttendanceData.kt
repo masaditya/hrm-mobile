@@ -4,7 +4,7 @@ data class AttendanceData(
     val company_id: Int,
     val user_id: Int,
     val clock_in_time: String,
-    val clock_out_time: String?,
+    val clock_out_time: String,
     val auto_clock_out: Boolean,
     val clock_in_ip: String,
     val clock_out_ip: String?,

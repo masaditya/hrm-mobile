@@ -54,7 +54,7 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private lateinit var checkInViewModel: CheckInStatusViewModel
+    private lateinit var checkStatusViewModel: CheckInStatusViewModel
     private lateinit var checkOutViewModel: CheckOutViewModel
     private var setCheckIn: String = ""
     private lateinit var sharedPreferences: SharedPreferences
@@ -91,20 +91,19 @@ class HomeFragment : Fragment() {
 
 
     private fun setupViewModel() {
-
         val apiService = RetrofitBuilder.apiService
         val repositoryCheckIn = CheckInStatusRepository(apiService)
         val repositoryCheckOut = CheckOutRepository(apiService)
 
-        val checkInViewModelFactory = CheckInStatusViewModelFactory(repositoryCheckIn)
+        val checkStatusViewModelFactory = CheckInStatusViewModelFactory(repositoryCheckIn)
         val checkOutViewModelFactory = CheckOutViewModelFactory(repositoryCheckOut)
-        checkInViewModel =
-            ViewModelProvider(this, checkInViewModelFactory)[CheckInStatusViewModel::class.java]
+        checkStatusViewModel =
+            ViewModelProvider(this, checkStatusViewModelFactory)[CheckInStatusViewModel::class.java]
         checkOutViewModel = ViewModelProvider(this, checkOutViewModelFactory)[CheckOutViewModel::class.java]
 
         val token = sharedPreferences.getString("token", "")
         val userId = sharedPreferences.getInt("userId", 0)
-        token?.let { checkInViewModel.getCheckInStatus(it, userId) }
+        token?.let { checkStatusViewModel.getCheckInStatus(it, userId) }
 
     }
 
@@ -139,7 +138,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun observeCheckStatus() {
-        checkInViewModel.checkInStatus.observe(viewLifecycleOwner) { response ->
+        checkStatusViewModel.checkInStatus.observe(viewLifecycleOwner) { response ->
             if (response?.data != null) {
                 if (response.data.clock_in_time != null){
                     binding.tvPresent.text = "Check Out"
@@ -164,10 +163,10 @@ class HomeFragment : Fragment() {
                 Log.d("HomeFragment", "Response or data is null. Set Check In: $setCheckIn")
             }
         }
-        checkInViewModel.error.observe(viewLifecycleOwner) { errorMessage ->
+        checkStatusViewModel.error.observe(viewLifecycleOwner) { errorMessage ->
             Log.d("HomeFragment", "Error message: $errorMessage")
         }
-        checkInViewModel.isLoading.observe(viewLifecycleOwner, Observer { isLoading ->
+        checkStatusViewModel.isLoading.observe(viewLifecycleOwner, Observer { isLoading ->
             if (isLoading) {
                 binding.layout.visibility = View.GONE
                 binding.loadingBar.visibility = View.VISIBLE
@@ -177,6 +176,7 @@ class HomeFragment : Fragment() {
             }
         })
     }
+
     @SuppressLint("NewApi")
     private fun observeCheckOut() {
         checkOutViewModel.checkOutResponse.observe(viewLifecycleOwner){ response ->

@@ -13,17 +13,26 @@ class AttendanceRepository(private val apiService: ApiService) {
     fun getPagedAttendance(
         token: String,
         workingFrom: String,
-        locationId: Int,
         userId: Int
     ): Flow<PagingData<AttendanceData>> {
         return Pager(
             config = PagingConfig(
-                pageSize = 20,
+                pageSize = 10,
                 enablePlaceholders = false
             ),
             pagingSourceFactory = {
-                AttendancePagingSource(apiService, token, workingFrom, locationId, userId)
+                AttendancePagingSource(apiService, token, workingFrom, userId)
             }
         ).flow
+    }
+    suspend fun fetchAttendance(
+        token: String,
+        workingFrom: String,
+        userId: Int,
+        page: Int,
+        limit: Int
+    ): List<AttendanceData> {
+        val response = apiService.getAttendance("Bearer $token", page, limit, workingFrom, userId)
+        return response.data ?: emptyList()
     }
 }

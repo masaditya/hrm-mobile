@@ -32,8 +32,8 @@ class HistoryAdapter : ListAdapter<AttendanceData, HistoryAdapter.HistoryViewHol
             binding.apply {
                 textViewDate.text = dateFormat(attendance.clock_in_time) ?: ""
                 textViewDay.text = dayFormat(attendance.clock_in_time) ?: ""
-                textViewStartTime.text = hourFormat(attendance.clock_in_time) ?: ""
-                textViewEndTime.text = hourFormat(attendance.clock_out_time) ?: ""
+                textViewStartTime.text = hourFormat(attendance.clock_in_time) ?: "-"
+                textViewEndTime.text = hourFormat(attendance.clock_out_time) ?: "-"
 
             }
         }

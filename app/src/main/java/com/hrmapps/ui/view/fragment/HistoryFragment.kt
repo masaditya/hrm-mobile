@@ -3,38 +3,34 @@ package com.hrmapps.ui.view.fragment
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isEmpty
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.asLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.animation.AnimationUtils
 import com.hrmapps.R
 import com.hrmapps.data.api.RetrofitBuilder
 import com.hrmapps.data.repository.AttendanceRepository
 import com.hrmapps.data.repository.CheckInStatusRepository
-import com.hrmapps.data.repository.CheckOutRepository
 import com.hrmapps.databinding.FragmentHistoryBinding
 import com.hrmapps.ui.adapter.HistoryAdapter
 import com.hrmapps.ui.viewmodel.AttendanceViewModel
 import com.hrmapps.ui.viewmodel.AttendanceViewModelFactory
 import com.hrmapps.ui.viewmodel.CheckInStatusViewModel
 import com.hrmapps.ui.viewmodel.CheckInStatusViewModelFactory
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.LocalTime
-import java.util.Calendar
 import java.util.Locale
 
 class HistoryFragment : Fragment() {
@@ -45,7 +41,7 @@ class HistoryFragment : Fragment() {
     private lateinit var checkStatusViewModel: CheckInStatusViewModel
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var historyAdapter: HistoryAdapter
-    private var selectedMonth: String? = null
+
     private val months = listOf("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -84,7 +80,7 @@ class HistoryFragment : Fragment() {
         token?.let { checkStatusViewModel.getCheckInStatus(it, userId) }
         viewModel = ViewModelProvider(this, AttendanceViewModelFactory(repositoryAttendance))[AttendanceViewModel::class.java]
     }
-    private fun observeAttendanceData() {
+    private fun observeAttendanceData(selectedMonth: String?) {
         val token = sharedPreferences.getString("token", "") ?: return
         val workingFrom = "office"
         val userId = sharedPreferences.getInt("userId", 0)
@@ -120,7 +116,19 @@ class HistoryFragment : Fragment() {
         }
 
         viewModel.loading.observe(viewLifecycleOwner) { isLoading ->
-            // Handle loading state if necessary
+            if (isLoading) {
+                binding.recyclerViewAttendance.visibility = View.GONE
+                binding.shimmerListHistory.startShimmer()
+                binding.shimmerListHistory.visibility = View.VISIBLE
+
+            } else {
+                lifecycleScope.launch {
+                    delay(1000)
+                    binding.shimmerListHistory.stopShimmer()
+                    binding.shimmerListHistory.visibility = View.GONE
+                    binding.recyclerViewAttendance.visibility = View.VISIBLE
+                }
+            }
         }
     }
     private fun observeCheckStatus() {
@@ -154,11 +162,17 @@ class HistoryFragment : Fragment() {
         }
         checkStatusViewModel.isLoading.observe(viewLifecycleOwner, Observer { isLoading ->
             if (isLoading) {
-                binding.shimmerLayout.visibility = View.VISIBLE
-                binding.layoutHistory.visibility = View.GONE
+                binding.layoutTop.visibility = View.GONE
+                binding.shimmerGetCheckLayout.startShimmer()
+                binding.shimmerGetCheckLayout.visibility = View.VISIBLE
+
             } else {
-                binding.shimmerLayout.visibility = View.GONE
-                binding.layoutHistory.visibility = View.VISIBLE
+                lifecycleScope.launch {
+                    delay(1000)
+                    binding.shimmerGetCheckLayout.stopShimmer()
+                    binding.shimmerGetCheckLayout.visibility = View.GONE
+                    binding.layoutTop.visibility = View.VISIBLE
+                }
             }
         })
     }
@@ -169,8 +183,7 @@ class HistoryFragment : Fragment() {
             setItems(months)
             spinnerPopupBackground = resources.getDrawable(R.drawable.spinner_background)
             setOnSpinnerItemSelectedListener<String> { _, _, _, selectedItem ->
-                selectedMonth = selectedItem
-                observeAttendanceData()
+                observeAttendanceData(selectedItem)
             }
         }
     }

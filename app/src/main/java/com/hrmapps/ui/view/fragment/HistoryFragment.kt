@@ -154,9 +154,11 @@ class HistoryFragment : Fragment() {
         }
         checkStatusViewModel.isLoading.observe(viewLifecycleOwner, Observer { isLoading ->
             if (isLoading) {
-
+                binding.shimmerLayout.visibility = View.VISIBLE
+                binding.layoutHistory.visibility = View.GONE
             } else {
-
+                binding.shimmerLayout.visibility = View.GONE
+                binding.layoutHistory.visibility = View.VISIBLE
             }
         })
     }
@@ -166,7 +168,7 @@ class HistoryFragment : Fragment() {
         binding.powerSpinnerView.apply {
             setItems(months)
             spinnerPopupBackground = resources.getDrawable(R.drawable.spinner_background)
-            setOnSpinnerItemSelectedListener<String> { _, selectedItem, _, _ ->
+            setOnSpinnerItemSelectedListener<String> { _, _, _, selectedItem ->
                 selectedMonth = selectedItem
                 observeAttendanceData()
             }

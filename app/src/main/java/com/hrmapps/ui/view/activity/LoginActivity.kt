@@ -2,13 +2,10 @@ package com.hrmapps.ui.view.activity
 
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.provider.Settings
 import android.text.TextUtils
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -18,10 +15,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.hrmapps.R
 import com.hrmapps.data.api.RetrofitBuilder
-import com.hrmapps.data.repository.AuthRepository
+import com.hrmapps.data.repository.auth.AuthRepository
 import com.hrmapps.databinding.ActivityLoginBinding
-import com.hrmapps.ui.viewmodel.AuthViewModel
-import com.hrmapps.ui.viewmodel.AuthViewModelFactory
+import com.hrmapps.ui.viewmodel.auth.AuthViewModel
+import com.hrmapps.ui.viewmodel.auth.AuthViewModelFactory
 import com.hrmapps.utils.getAndroidId
 
 class LoginActivity : AppCompatActivity() {
@@ -75,10 +72,11 @@ class LoginActivity : AppCompatActivity() {
                 sharedPreferences.edit().putInt("userId", response.user.id).apply()
                 sharedPreferences.edit().putInt("companyId", response.user.company_id).apply()
                 finish()
-                Toast.makeText(this, "Login sukses! Token: ${response.token}", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "Login gagal, periksa kredensial Anda", Toast.LENGTH_SHORT).show()
             }
+        })
+        authViewModel.errorMessage.observe(this, Observer { errorMessage ->
+            progressDialog.dismiss()
+            Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
         })
 
         authViewModel.isLoading.observe(this, Observer { isLoading ->

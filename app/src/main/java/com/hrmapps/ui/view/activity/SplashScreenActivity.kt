@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import androidx.activity.enableEdgeToEdge
@@ -28,18 +29,25 @@ class SplashScreenActivity : AppCompatActivity() {
         setContentView(binding.root)
         sharedPreferences = getSharedPreferences("isLoggedIn", MODE_PRIVATE)
         val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
+        setupAnimation()
+        navigateAfterDelay(isLoggedIn)
+    }
 
-        Handler().postDelayed({
-            if (isLoggedIn) {
-                binding.progressBar.visibility = View.GONE
-                startActivity(Intent(this, MainActivity::class.java))
-                finish()
-            }else{
-                binding.progressBar.visibility = View.GONE
-                startActivity(Intent(this, LoginActivity::class.java))
-                finish()
-            }
+    private fun setupAnimation() {
+        binding.lavLoading.apply {
+            setAnimation(R.raw.loading)
+            playAnimation()
+            loop(true)
+        }
+    }
+
+    private fun navigateAfterDelay(isLoggedIn: Boolean) {
+        Handler(Looper.getMainLooper()).postDelayed({
+            binding.lavLoading.visibility = View.GONE
+            val nextActivity =
+                if (isLoggedIn) MainActivity::class.java else LoginActivity::class.java
+            startActivity(Intent(this, nextActivity))
+            finish()
         }, 3000)
-
     }
 }

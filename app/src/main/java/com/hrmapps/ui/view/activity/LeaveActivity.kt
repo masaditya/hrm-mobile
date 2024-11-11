@@ -8,7 +8,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hrmapps.R
-import com.hrmapps.data.model.Leave
+import com.hrmapps.data.model.leave.Leave
 import com.hrmapps.databinding.ActivityLeaveBinding
 import com.hrmapps.ui.adapter.LeaveAdapter
 

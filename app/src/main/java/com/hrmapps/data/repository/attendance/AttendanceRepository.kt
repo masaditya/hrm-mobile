@@ -1,11 +1,11 @@
-package com.hrmapps.data.repository
+package com.hrmapps.data.repository.attendance
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
 import com.hrmapps.data.api.ApiService
-import com.hrmapps.data.model.AttendanceData
+import com.hrmapps.data.model.attendance.AttendanceData
 import com.hrmapps.data.paging.AttendancePagingSource
 
 class AttendanceRepository(private val apiService: ApiService) {

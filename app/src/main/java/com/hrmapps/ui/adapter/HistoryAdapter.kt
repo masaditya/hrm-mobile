@@ -1,12 +1,11 @@
 package com.hrmapps.ui.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.hrmapps.data.model.AttendanceData
+import com.hrmapps.data.model.attendance.AttendanceData
 import com.hrmapps.databinding.HistoryItemBinding
 import java.text.SimpleDateFormat
 import java.util.Locale

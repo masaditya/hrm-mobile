@@ -3,8 +3,7 @@ package com.hrmapps.ui.view.activity
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
@@ -15,16 +14,21 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.hrmapps.R
 import com.hrmapps.data.api.RetrofitBuilder
-import com.hrmapps.data.repository.AuthRepository
+import com.hrmapps.data.repository.auth.AuthRepository
+import com.hrmapps.data.repository.auth.GetUserRepository
 import com.hrmapps.databinding.ActivityProfileBinding
-import com.hrmapps.ui.viewmodel.AuthViewModel
-import com.hrmapps.ui.viewmodel.AuthViewModelFactory
+import com.hrmapps.ui.viewmodel.auth.AuthViewModel
+import com.hrmapps.ui.viewmodel.auth.AuthViewModelFactory
+import com.hrmapps.ui.viewmodel.auth.GetUserLoginViewModel
+import com.hrmapps.ui.viewmodel.auth.GetUserLoginViewModelFactory
 
 class ProfileActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityProfileBinding
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var authViewModel: AuthViewModel
+    private lateinit var viewModel: GetUserLoginViewModel
+    private lateinit var viewModelFactory: GetUserLoginViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,18 +46,13 @@ class ProfileActivity : AppCompatActivity() {
         val authRepository = AuthRepository(apiService)
 
         authViewModel = ViewModelProvider(this, AuthViewModelFactory(authRepository))[AuthViewModel::class.java]
-        binding.toolbar.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.editProfile -> {
-                    val intent = Intent(this, EditProfileActivity::class.java)
-                    startActivity(intent)
-                    true
-                    }
-                else -> false
-            }
-        }
+
+        val getUserRepository = GetUserRepository(apiService)
+        viewModelFactory = GetUserLoginViewModelFactory(getUserRepository)
+        viewModel = ViewModelProvider(this, viewModelFactory)[GetUserLoginViewModel::class.java]
+
         binding.toolbar.setNavigationOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
 
         binding.buttonLogout.setOnClickListener {
@@ -78,6 +77,14 @@ class ProfileActivity : AppCompatActivity() {
 
 
         }
+        binding.btEditImage.setOnClickListener {
+            Toast.makeText(this, "Edit Photo Profile", Toast.LENGTH_SHORT).show()
+        }
+        binding.buttonChangePassword.setOnClickListener {
+            val intent = Intent(this, ChangePasswordActivity::class.java)
+            startActivity(intent)
+        }
+        setupUI()
         observerViewModel()
     }
 
@@ -96,7 +103,41 @@ class ProfileActivity : AppCompatActivity() {
                 }
             }
         })
+        authViewModel.isLoading.observe(this, Observer { isLoading ->
+            if (isLoading) {
+                binding.loadingBar.visibility = View.VISIBLE
+            } else {
+                binding.loadingBar.visibility = View.GONE
+            }
+        })
+
+        authViewModel.errorMessage.observe(this){  error->
+            Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
+        }
     }
+    private fun setupUI() {
+        val token = sharedPreferences.getString("token", "").toString()
 
+        viewModel.getUserLogin(token)
 
+        viewModel.userResponse.observe(this) { response ->
+            val user = response.data
+            binding.tvName.text = user.name
+            binding.tvEmail.text = user.email
+            binding.etCompany.setText(user.designation)
+            binding.etRole.setText(user.role)
+            binding.etEmployeeId.setText(user.employee_id)
+        }
+
+        viewModel.error.observe(this) { errorMessage ->
+            Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
+        }
+        viewModel.isLoading.observe(this) { isLoading ->
+            if (isLoading) {
+                binding.loadingBar.visibility = View.VISIBLE
+            } else {
+                binding.loadingBar.visibility = View.GONE
+            }
+        }
+    }
 }

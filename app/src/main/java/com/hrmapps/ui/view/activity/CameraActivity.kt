@@ -1,16 +1,21 @@
 package com.hrmapps.ui.view.activity
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.RectF
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -27,6 +32,10 @@ class CameraActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCameraBinding
     private var isFaceDetected = false
     private lateinit var faceContourProcessor: FaceContourDetectionProcessor
+    private var page: String? = null
+
+    private val CAMERA_PERMISSION_CODE = 100
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,14 +47,18 @@ class CameraActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        checkCameraPermission()
         binding.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
+
         binding.captureButton.isEnabled = false
         binding.captureButton.setOnClickListener {
             captureImage()
         }
+        page = intent.getStringExtra("Page")
 
+        binding.toolbar.title = page
         faceContourProcessor = FaceContourDetectionProcessor(binding.faceOverlayView)
         startCamera()
     }
@@ -97,7 +110,6 @@ class CameraActivity : AppCompatActivity() {
     }
 
     private fun updateFaceDetectionStatus(faces: List<Face>) {
-        val rectangles = mutableListOf<RectF>()
         if (faces.isNotEmpty()) {
             isFaceDetected = true
             binding.captureButton.isEnabled = true
@@ -127,16 +139,57 @@ class CameraActivity : AppCompatActivity() {
         binding.previewView.bitmap?.let { bitmap ->
             val imageUri = saveBitmapToFile(bitmap)
             if (imageUri != null) {
-                val intent = Intent(this, PresentCheckInActivity::class.java)
-                intent.putExtra("captured_image_uri", imageUri.toString())
-                startActivity(intent)
-                finish()
+                if (page == "Check-In Selfie"){
+                    val intent = Intent(this, PresentCheckInActivity::class.java)
+                    intent.putExtra("captured_image_uri", imageUri.toString())
+                    startActivity(intent)
+                    finish()
+                }
+                else if (page == "Patroli Selfie") {
+                    val intent = Intent(this, PatrolActivity::class.java)
+                    intent.putExtra("captured_image_uri", imageUri.toString())
+                    startActivity(intent)
+                    finish()
+                }
+
             } else {
                 // Handle error saving the image
             }
         }
     }
+    private fun checkCameraPermission() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.CAMERA
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
 
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.CAMERA),
+                CAMERA_PERMISSION_CODE
+            )
+        } else {
+            Log.d("Permission", "Izin kamera diberikan")
+
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == CAMERA_PERMISSION_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.d("Permission", "Izin kamera diberikan")
+
+            } else {
+                Toast.makeText(this, "Izin kamera ditolak", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
     override fun onStop() {
         super.onStop()

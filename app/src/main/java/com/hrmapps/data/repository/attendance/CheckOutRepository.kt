@@ -1,4 +1,4 @@
-package com.hrmapps.data.repository
+package com.hrmapps.data.repository.attendance
 
 import com.hrmapps.data.api.ApiService
 import com.hrmapps.data.model.response.CheckOutResponse

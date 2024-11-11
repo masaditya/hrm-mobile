@@ -2,11 +2,9 @@ package com.hrmapps.ui.view.fragment
 
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.app.ProgressDialog
 import android.content.Intent
 import android.content.SharedPreferences
 import android.icu.util.Calendar
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -14,40 +12,34 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.lottie.LottieAnimationView
 import com.airbnb.lottie.LottieCompositionFactory
 import com.hrmapps.R
 import com.hrmapps.data.api.RetrofitBuilder
-import com.hrmapps.data.repository.CheckInStatusRepository
-import com.hrmapps.data.repository.CheckOutRepository
+import com.hrmapps.data.repository.attendance.CheckInStatusRepository
+import com.hrmapps.data.repository.attendance.CheckOutRepository
 import com.hrmapps.databinding.FragmentHomeBinding
 import com.hrmapps.ui.view.activity.CameraActivity
 import com.hrmapps.ui.view.activity.LeaveActivity
-import com.hrmapps.ui.view.activity.PresentCheckInActivity
 import com.hrmapps.ui.view.activity.RequestActivity
-import com.hrmapps.ui.viewmodel.CheckInStatusViewModel
-import com.hrmapps.ui.viewmodel.CheckInStatusViewModelFactory
-import com.hrmapps.ui.viewmodel.CheckOutViewModel
-import com.hrmapps.ui.viewmodel.CheckOutViewModelFactory
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import com.hrmapps.ui.viewmodel.attendance.CheckInStatusViewModel
+import com.hrmapps.ui.viewmodel.attendance.CheckInStatusViewModelFactory
+import com.hrmapps.ui.viewmodel.attendance.CheckOutViewModel
+import com.hrmapps.ui.viewmodel.attendance.CheckOutViewModelFactory
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.time.LocalTime
 import java.time.Duration
-import java.time.OffsetDateTime
-import java.time.format.DateTimeFormatter
-import java.util.TimeZone
 
 
 class HomeFragment : Fragment() {
@@ -82,9 +74,8 @@ class HomeFragment : Fragment() {
             requireContext().getSharedPreferences("isLoggedIn", AppCompatActivity.MODE_PRIVATE)
         setupUI()
         setupViewModel()
-        observeCheckStatus()
         observeCheckOut()
-
+        observeCheckStatus()
         handler.post(runnable)
 
     }
@@ -104,31 +95,30 @@ class HomeFragment : Fragment() {
         val token = sharedPreferences.getString("token", "")
         val userId = sharedPreferences.getInt("userId", 0)
         token?.let { checkStatusViewModel.getCheckInStatus(it, userId) }
-
+        observeCheckStatus()
     }
 
     private fun setupUI() {
-        binding.linearLayout2.apply {
-        }
-        binding.btCheckpoint.setOnClickListener {
-
+        binding.btPatroli.setOnClickListener {
+            val intent = Intent(requireContext(), CameraActivity::class.java).apply {
+                putExtra("Page", "Patroli Selfie")
+            }
+            startActivity(intent)
         }
         binding.btPresent.setOnClickListener {
-            val isCheckInDone = binding.tvCheckIn.text
-            val isCheckOutDone = binding.tvCheckOut.text
-
-            if (isCheckInDone != "Check In" && isCheckOutDone != "Check Out") {
-                Toast.makeText(requireContext(), "Anda sudah melakukan absen hari ini", Toast.LENGTH_LONG).show()
+            if (binding.tvPresent.text == "Check Out") {
+                dialogCheckOut()
+                observeCheckStatus()
             } else {
-                if (binding.tvPresent.text == "Check Out") {
-                    dialogCheckOut()
-                    observeCheckStatus()
-                } else {
-                    startActivity(Intent(requireContext(), CameraActivity::class.java))
+                val intent = Intent(requireContext(), CameraActivity::class.java).apply {
+                    putExtra("Page", "Check-In Selfie")
                 }
-            }
+                startActivity(intent)
 
+
+            }
         }
+
         binding.btLeave.setOnClickListener {
             startActivity(Intent(requireContext(), LeaveActivity::class.java))
         }
@@ -145,15 +135,14 @@ class HomeFragment : Fragment() {
                     val clockCheckIn = response.data.clock_in_time
                     val clockInTime = getHourFromDateString(clockCheckIn)
                     binding.tvCheckIn.text = "Check In : $clockInTime"
-                    binding.tvCheckIn.setTextColor(requireContext().getColor(R.color.green))
                     if (response.data.clock_out_time != null){
                         binding.tvPresent.text = "Check In"
                         val clockCheckOut = response.data.clock_out_time
                         val clockOutTime = getHourFromDateString(clockCheckOut)
                         binding.tvCheckOut.text = "Check Out : $clockOutTime"
-                        binding.tvCheckOut.setTextColor(requireContext().getColor(R.color.green))
-                        binding.linearLayout4.visibility = View.VISIBLE
                         binding.tvLengthOfWork.text = calculateTotalHours(clockInTime, clockOutTime)
+                        binding.linearLayout4.visibility = View.VISIBLE
+
                     }
 
                 }else{
@@ -168,11 +157,17 @@ class HomeFragment : Fragment() {
         }
         checkStatusViewModel.isLoading.observe(viewLifecycleOwner, Observer { isLoading ->
             if (isLoading) {
+                binding.shimmerLayout.startShimmer()
                 binding.layout.visibility = View.GONE
-                binding.loadingBar.visibility = View.VISIBLE
+                binding.shimmerLayout.visibility = View.VISIBLE
             } else {
-                binding.layout.visibility = View.VISIBLE
-                binding.loadingBar.visibility = View.GONE
+                lifecycleScope.launch {
+                    delay(1000)
+                    binding.shimmerLayout.stopShimmer()
+                    binding.layout.visibility = View.VISIBLE
+                    binding.shimmerLayout.visibility = View.GONE
+                }
+
             }
         })
     }
@@ -185,6 +180,7 @@ class HomeFragment : Fragment() {
                 val clockCheckOut = response.data.clock_out_time
                 val clockOutTime = getHourFromDateString(clockCheckOut)
                 binding.tvCheckOut.text = "Check Out : $clockOutTime"
+                observeCheckStatus()
             } else {
                 Toast.makeText(requireContext(), "Check-out failed", Toast.LENGTH_SHORT).show()
                 showCheckOutResultDialog(false)
@@ -196,12 +192,16 @@ class HomeFragment : Fragment() {
         }
         checkOutViewModel.isLoading.observe(viewLifecycleOwner, Observer { isLoading ->
             if (isLoading) {
-                binding.loadingBar.visibility = View.VISIBLE
+                binding.shimmerLayout.startShimmer()
                 binding.layout.visibility = View.GONE
-
+                binding.shimmerLayout.visibility = View.VISIBLE
             } else {
-                binding.loadingBar.visibility = View.GONE
-                binding.layout.visibility = View.VISIBLE
+                lifecycleScope.launch {
+                    delay(1000)
+                    binding.shimmerLayout.stopShimmer()
+                    binding.layout.visibility = View.VISIBLE
+                    binding.shimmerLayout.visibility = View.GONE
+                }
 
             }
         })
@@ -280,7 +280,6 @@ class HomeFragment : Fragment() {
             }
             tvStatusMessage.text = "Check-out Berhasil!"
             binding.linearLayout4.visibility = View.VISIBLE
-            binding.tvCheckOut.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
             tvStatusMessage.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
             tvDetailedMessage.text = "Terima kasih atas dedikasi dan kerja keras Anda hari ini. Semoga istirahat Anda menyenangkan!"
         } else {

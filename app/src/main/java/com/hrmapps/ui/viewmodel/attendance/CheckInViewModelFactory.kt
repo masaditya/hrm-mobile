@@ -1,8 +1,8 @@
-package com.hrmapps.ui.viewmodel
+package com.hrmapps.ui.viewmodel.attendance
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.hrmapps.data.repository.CheckInRepository
+import com.hrmapps.data.repository.attendance.CheckInRepository
 
 class CheckInViewModelFactory(private val repository: CheckInRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

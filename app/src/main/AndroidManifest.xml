@@ -26,7 +26,10 @@
         android:theme="@style/Theme.HRMApps"
         tools:targetApi="tiramisu">
         <activity
-            android:name=".ui.view.activity.PresentCheckOutActivity"
+            android:name=".ui.view.activity.ChangePasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.view.activity.PatrolActivity"
             android:exported="false" />
         <activity
             android:name=".ui.view.activity.MainActivity"

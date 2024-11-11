@@ -1,12 +1,10 @@
 package com.hrmapps.ui.view.activity
 
 import android.Manifest
-import android.app.ProgressDialog
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -17,29 +15,29 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.hrmapps.BuildConfig
+import androidx.lifecycle.lifecycleScope
 import com.hrmapps.R
 import com.hrmapps.data.api.RetrofitBuilder
-import com.hrmapps.data.repository.AuthRepository
-import com.hrmapps.data.repository.GetUserRepository
+import com.hrmapps.data.repository.auth.GetUserRepository
 import com.hrmapps.databinding.ActivityMainBinding
-import com.hrmapps.ui.view.fragment.HistoryFragment
 import com.hrmapps.ui.view.fragment.HomeFragment
-import com.hrmapps.ui.viewmodel.AuthViewModel
-import com.hrmapps.ui.viewmodel.AuthViewModelFactory
-import com.hrmapps.ui.viewmodel.CheckInStatusViewModel
-import com.hrmapps.ui.viewmodel.GetUserLoginViewModel
-import com.hrmapps.ui.viewmodel.GetUserLoginViewModelFactory
+import com.hrmapps.ui.viewmodel.auth.GetUserLoginViewModel
+import com.hrmapps.ui.viewmodel.auth.GetUserLoginViewModelFactory
 import com.qamar.curvedbottomnaviagtion.CurvedBottomNavigation
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val CAMERA_PERMISSION_CODE = 100
+
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var viewModel: GetUserLoginViewModel
     private lateinit var viewModelFactory: GetUserLoginViewModelFactory
 
+    companion object{
+        private val LOCATION_PERMISSION_REQUEST_CODE = 2
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -53,16 +51,13 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-
+        checkLocationPermission()
         val apiService = RetrofitBuilder.apiService
         val getUserRepository = GetUserRepository(apiService)
         viewModelFactory = GetUserLoginViewModelFactory(getUserRepository)
         viewModel = ViewModelProvider(this, viewModelFactory)[GetUserLoginViewModel::class.java]
 
         sharedPreferences = getSharedPreferences("isLoggedIn", MODE_PRIVATE)
-
-        checkCameraPermission()
 
         binding.bottomNavigation.add(
             CurvedBottomNavigation.Model(1, "History", R.drawable.ic_history)
@@ -77,7 +72,8 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigation.setOnClickMenuListener {
             when (it.id) {
                 1 -> {
-                    loadFragment(HistoryFragment())
+                    Toast.makeText(this, "History", Toast.LENGTH_SHORT).show()
+//                    loadFragment(HistoryFragment())
                 }
 
                 2 -> {
@@ -122,49 +118,34 @@ class MainActivity : AppCompatActivity() {
         }
         viewModel.isLoading.observe(this) { isLoading ->
             if (isLoading) {
-                binding.shimmerLayout.startShimmer()
-                binding.shimmerLayout.visibility = View.VISIBLE
-                binding.linearLayout.visibility = View.GONE
+                binding.shimmerLayoutProfile.startShimmer()
+                binding.layoutProfile.visibility = View.GONE
+                binding.shimmerLayoutProfile.visibility = View.VISIBLE
+
             } else {
-                binding.shimmerLayout.stopShimmer()
-                binding.shimmerLayout.visibility = View.GONE
-                binding.linearLayout.visibility = View.VISIBLE
+                lifecycleScope.launch {
+                    delay(1000)
+                    binding.shimmerLayoutProfile.stopShimmer()
+                    binding.shimmerLayoutProfile.visibility = View.GONE
+                    binding.layoutProfile.visibility = View.VISIBLE
+                }
             }
         }
     }
-
-
-    private fun checkCameraPermission() {
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.CAMERA
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-
+    private fun checkLocationPermission() {
+        if (!hasLocationPermission()) {
             ActivityCompat.requestPermissions(
                 this,
-                arrayOf(Manifest.permission.CAMERA),
-                CAMERA_PERMISSION_CODE
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
+                LOCATION_PERMISSION_REQUEST_CODE
             )
-        } else {
-            Log.d("Permission", "Izin kamera diberikan")
-
         }
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == CAMERA_PERMISSION_CODE) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.d("Permission", "Izin kamera diberikan")
+    private fun hasLocationPermission() = listOf(
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.ACCESS_COARSE_LOCATION
+    ).all { ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED }
 
-            } else {
-                Toast.makeText(this, "Izin kamera ditolak", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
+
 }

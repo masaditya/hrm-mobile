@@ -1,15 +1,9 @@
-package com.hrmapps.ui.viewmodel
+package com.hrmapps.ui.viewmodel.attendance
 
 import androidx.lifecycle.*
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
-import com.hrmapps.data.model.AttendanceData
-import com.hrmapps.data.repository.AttendanceRepository
-import kotlinx.coroutines.flow.Flow
+import com.hrmapps.data.model.attendance.AttendanceData
+import com.hrmapps.data.repository.attendance.AttendanceRepository
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 class AttendanceViewModel(private val repository: AttendanceRepository) : ViewModel() {
 

@@ -3,7 +3,7 @@ package com.hrmapps.data.paging
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.hrmapps.data.api.ApiService
-import com.hrmapps.data.model.AttendanceData
+import com.hrmapps.data.model.attendance.AttendanceData
 import retrofit2.HttpException
 import java.io.IOException
 

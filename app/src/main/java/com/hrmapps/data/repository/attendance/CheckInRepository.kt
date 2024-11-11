@@ -1,4 +1,4 @@
-package com.hrmapps.data.repository
+package com.hrmapps.data.repository.attendance
 
 import com.hrmapps.data.api.ApiService
 import com.hrmapps.data.model.response.CheckInResponse
@@ -15,6 +15,7 @@ class CheckInRepository(private val apiService: ApiService) {
     suspend fun checkIn(
         companyId: String,
         userId: String,
+        locationId: String,
         clockInTime: String,
         autoClockOut: String,
         clockInIp: String,
@@ -28,7 +29,7 @@ class CheckInRepository(private val apiService: ApiService) {
     ): Result<CheckInResponse> {
         return try {
             val requestBody = createRequestBody(
-                companyId, userId, clockInTime, autoClockOut, clockInIp, late,
+                companyId, userId,locationId, clockInTime, autoClockOut, clockInIp, late,
                 latitude, longitude, workFromType, overwriteAttendance
             )
 
@@ -44,6 +45,7 @@ class CheckInRepository(private val apiService: ApiService) {
     private fun createRequestBody(
         companyId: String,
         userId: String,
+        locationId: String,
         clockInTime: String,
         autoClockOut: String,
         clockInIp: String,
@@ -57,6 +59,7 @@ class CheckInRepository(private val apiService: ApiService) {
 
         requestBodyMap["company_id"] = companyId.toRequestBody("text/plain".toMediaType())
         requestBodyMap["user_id"] = userId.toRequestBody("text/plain".toMediaType())
+        requestBodyMap["location_id"] = locationId.toRequestBody("text/plain".toMediaType())
         requestBodyMap["clock_in_time"] = clockInTime.toRequestBody("text/plain".toMediaType())
         requestBodyMap["auto_clock_out"] = autoClockOut.toRequestBody("text/plain".toMediaType())
         requestBodyMap["clock_in_ip"] = clockInIp.toRequestBody("text/plain".toMediaType())

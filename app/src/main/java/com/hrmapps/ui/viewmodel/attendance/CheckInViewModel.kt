@@ -1,4 +1,4 @@
-package com.hrmapps.ui.viewmodel
+package com.hrmapps.ui.viewmodel.attendance
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hrmapps.data.model.response.CheckInResponse
-import com.hrmapps.data.repository.CheckInRepository
+import com.hrmapps.data.repository.attendance.CheckInRepository
 import kotlinx.coroutines.launch
 import java.io.File
 
@@ -23,6 +23,7 @@ class CheckInViewModel(private val repository: CheckInRepository) : ViewModel() 
     fun checkIn(
         companyId: String,
         userId: String,
+        locationId: String,
         clockInTime: String,
         autoClockOut: String,
         clockInIp: String,
@@ -40,6 +41,7 @@ class CheckInViewModel(private val repository: CheckInRepository) : ViewModel() 
                 val response = repository.checkIn(
                     companyId,
                     userId,
+                    locationId,
                     clockInTime,
                     autoClockOut,
                     clockInIp,

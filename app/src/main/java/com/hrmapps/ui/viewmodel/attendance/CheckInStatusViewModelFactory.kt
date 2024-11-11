@@ -1,8 +1,8 @@
-package com.hrmapps.ui.viewmodel
+package com.hrmapps.ui.viewmodel.attendance
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.hrmapps.data.repository.CheckInStatusRepository
+import com.hrmapps.data.repository.attendance.CheckInStatusRepository
 
 class CheckInStatusViewModelFactory(
     private val repository: CheckInStatusRepository

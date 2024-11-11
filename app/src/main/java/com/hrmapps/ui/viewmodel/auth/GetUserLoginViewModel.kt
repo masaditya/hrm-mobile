@@ -1,12 +1,10 @@
-package com.hrmapps.ui.viewmodel
+package com.hrmapps.ui.viewmodel.auth
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.hrmapps.data.model.response.GetUserResponse
-import com.hrmapps.data.repository.GetUserRepository
-import kotlinx.coroutines.launch
+import com.hrmapps.data.repository.auth.GetUserRepository
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

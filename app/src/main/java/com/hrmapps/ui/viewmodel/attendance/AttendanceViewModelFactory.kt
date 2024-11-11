@@ -1,8 +1,8 @@
-package com.hrmapps.ui.viewmodel
+package com.hrmapps.ui.viewmodel.attendance
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.hrmapps.data.repository.AttendanceRepository
+import com.hrmapps.data.repository.attendance.AttendanceRepository
 
 class AttendanceViewModelFactory(
     private val repository: AttendanceRepository

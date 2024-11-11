@@ -1,10 +1,10 @@
-package com.hrmapps.ui.viewmodel
+package com.hrmapps.ui.viewmodel.attendance
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hrmapps.data.model.response.CheckOutResponse
-import com.hrmapps.data.repository.CheckOutRepository
+import com.hrmapps.data.repository.attendance.CheckOutRepository
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

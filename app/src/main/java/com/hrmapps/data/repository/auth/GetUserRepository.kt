@@ -1,4 +1,4 @@
-package com.hrmapps.data.repository
+package com.hrmapps.data.repository.auth
 
 import com.hrmapps.data.api.ApiService
 import com.hrmapps.data.model.response.GetUserResponse

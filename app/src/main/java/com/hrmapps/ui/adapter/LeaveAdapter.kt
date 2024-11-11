@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.RecyclerView
 import com.hrmapps.R
-import com.hrmapps.data.model.Leave
+import com.hrmapps.data.model.leave.Leave
 import com.hrmapps.databinding.ItemRiwayatCutiBinding
 
 class LeaveAdapter(private val leaveList: List<Leave>) :

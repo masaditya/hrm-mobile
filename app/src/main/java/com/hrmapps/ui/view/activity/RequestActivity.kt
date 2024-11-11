@@ -9,7 +9,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hrmapp.ui.adapter.JobAdapter
 import com.hrmapps.R
-import com.hrmapps.data.model.Job
+import com.hrmapps.data.model.request.Job
 import com.hrmapps.databinding.ActivityRequestBinding
 
 class RequestActivity : AppCompatActivity() {

@@ -1,7 +1,7 @@
 package com.hrmapps.data.model.response
 
-import com.hrmapps.data.model.AttendanceData
-import com.hrmapps.data.model.Link
+import com.hrmapps.data.model.attendance.AttendanceData
+import com.hrmapps.data.model.attendance.Link
 
 data class AttendanceResponse(
     val current_page: Int,

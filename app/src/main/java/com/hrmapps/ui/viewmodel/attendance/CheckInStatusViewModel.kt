@@ -1,12 +1,10 @@
-package com.hrmapps.ui.viewmodel
+package com.hrmapps.ui.viewmodel.attendance
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.hrmapps.data.model.response.CheckInStatusResponse
-import com.hrmapps.data.repository.CheckInStatusRepository
-import kotlinx.coroutines.launch
+import com.hrmapps.data.repository.attendance.CheckInStatusRepository
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

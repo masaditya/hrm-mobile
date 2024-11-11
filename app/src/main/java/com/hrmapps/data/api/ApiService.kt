@@ -5,7 +5,10 @@ import com.hrmapps.data.model.response.AttendanceResponse
 import com.hrmapps.data.model.response.CheckInResponse
 import com.hrmapps.data.model.response.CheckInStatusResponse
 import com.hrmapps.data.model.response.CheckOutResponse
+import com.hrmapps.data.model.response.CheckPointResponse
+import com.hrmapps.data.model.response.CreatePatrolResponse
 import com.hrmapps.data.model.response.GetUserResponse
+import com.hrmapps.data.model.response.LocationOfficeUserResponse
 import com.hrmapps.data.model.response.LoginResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -77,4 +80,30 @@ interface ApiService {
         @Query("working_from") workingFrom: String,
         @Query("user_id") userId: Int
     ): AttendanceResponse
+
+    @GET("api/attendance/get-user-detail")
+    fun getLocationOfficeUser(
+        @Header("Authorization") token: String,
+    ): Call<LocationOfficeUserResponse>
+
+    @Multipart
+    @POST("api/patrol/create")
+    suspend fun createPatrol(
+        @Header("Authorization") token: String,
+        @PartMap requestBody: Map<String, @JvmSuppressWildcards RequestBody>,
+        @Part image: MultipartBody.Part
+    ): CreatePatrolResponse
+
+    @GET("api/patrol-types")
+    fun getPatrolTypes(
+        @Header("Authorization") token: String,
+    ): Call<CheckPointResponse>
+
+    @FormUrlEncoded
+    @PATCH("api/update-password")
+    fun changePassword(
+        @Header("Authorization") token: String,
+        @Field("password") password: String,
+        @Field("password_confirmation") passwordConfirmation: String
+    ): Call<ResponseBody>
 }

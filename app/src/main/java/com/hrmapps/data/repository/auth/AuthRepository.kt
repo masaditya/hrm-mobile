@@ -1,12 +1,10 @@
-package com.hrmapps.data.repository
+package com.hrmapps.data.repository.auth
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.hrmapps.data.api.ApiService
 import com.hrmapps.data.model.response.LoginResponse
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -34,6 +32,25 @@ class AuthRepository(private val apiService: ApiService) {
         })
 
         return result
+    }
+    fun changePassword(token: String, password: String, passwordConfirmation: String): MutableLiveData<Result<Boolean>> {
+        val result = MutableLiveData<Result<Boolean>>()
+
+        apiService.changePassword("Bearer $token", password, passwordConfirmation).enqueue(object : Callback<ResponseBody>{
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    result.value = Result.success(true)
+                } else {
+                    result.value = Result.failure(Throwable("Logout failed"))
+
+                }
+        }
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                result.value = Result.failure(t)
+            }
+        })
+        return result
+
     }
 
 

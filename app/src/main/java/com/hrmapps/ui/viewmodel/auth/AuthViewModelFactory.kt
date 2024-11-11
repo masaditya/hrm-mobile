@@ -1,8 +1,8 @@
-package com.hrmapps.ui.viewmodel
+package com.hrmapps.ui.viewmodel.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.hrmapps.data.repository.AuthRepository
+import com.hrmapps.data.repository.auth.AuthRepository
 
 class AuthViewModelFactory(private val authRepository: AuthRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

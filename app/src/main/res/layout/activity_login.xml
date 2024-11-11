@@ -32,6 +32,9 @@
         android:layout_marginVertical="16dp"
         app:boxBackgroundColor="@color/transparent"
         app:boxStrokeColor="@color/transparent"
+        app:hintTextColor="@color/white"
+        app:counterTextColor="@color/white"
+        app:placeholderTextColor="@color/white"
         app:layout_constraintTop_toBottomOf="@+id/tvTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -50,6 +53,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Password"
+        app:hintTextColor="@color/white"
+        app:counterTextColor="@color/white"
+        app:placeholderTextColor="@color/white"
+
         android:textColorHint="@color/white"
         android:layout_marginVertical="8dp"
         app:endIconMode="password_toggle"
@@ -67,7 +74,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
-            android:hint="Password"
             android:textColor="@color/white" />
     </com.google.android.material.textfield.TextInputLayout>
 

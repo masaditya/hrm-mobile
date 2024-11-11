@@ -71,28 +71,6 @@
             android:layout_height="wrap_content"
             android:text="Full Day"
             android:textColor="@color/white" />
-        <RadioButton
-            android:id="@+id/radio_multiple"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="Multiple"
-            android:textColor="@color/white" />
-        <RadioButton
-            android:id="@+id/radio_first_half"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="First Half"
-            android:textColor="@color/white" />
-
-        <RadioButton
-            android:id="@+id/radio_second_half"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Second Half"
-            android:textColor="@color/white" />
     </RadioGroup>
 
     <com.google.android.material.textfield.TextInputLayout

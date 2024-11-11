@@ -1,4 +1,4 @@
-package com.hrmapps.data.model
+package com.hrmapps.data.model.leave
 
 data class Leave(
     val tanggalCuti: String,

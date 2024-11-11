@@ -3,7 +3,7 @@ package com.example.hrmapp.ui.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.hrmapps.data.model.Job
+import com.hrmapps.data.model.request.Job
 import com.hrmapps.databinding.ItemJobBinding
 
 class JobAdapter(private val jobList: List<Job>, private val onClick: (Job) -> Unit) : RecyclerView.Adapter<JobAdapter.JobViewHolder>() {

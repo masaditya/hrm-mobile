@@ -1,4 +1,4 @@
-package com.hrmapps.data.model
+package com.hrmapps.data.model.auth
 
 data class User(
     val id: Int,

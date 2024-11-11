@@ -1,4 +1,4 @@
-package com.hrmapps.data.model
+package com.hrmapps.data.model.attendance
 
 data class AttendanceData(
     val company_id: Int,

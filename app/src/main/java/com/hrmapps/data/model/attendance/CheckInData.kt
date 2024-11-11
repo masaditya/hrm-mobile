@@ -1,10 +1,9 @@
-package com.hrmapps.data.model
-
-import java.io.File
+package com.hrmapps.data.model.attendance
 
 data class CheckInData(
     val company_id: String,
     val user_id: String,
+    val location_id: String,
     val clock_in_time: String,
     val auto_clock_out: String,
     val clock_in_ip: String,

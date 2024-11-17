@@ -35,6 +35,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
 import com.hrmapps.R
@@ -85,7 +86,32 @@ class PresentCheckInActivity : AppCompatActivity(), OnMapReadyCallback {
         CoroutineScope(Dispatchers.Main).launch { getCurrentLocation() }
         getLocationOfficeUser()
     }
+    override fun onMapReady(googleMap: GoogleMap) {
+        mMap = googleMap
+        mMap.uiSettings.isZoomControlsEnabled = true
+        mMap.uiSettings.isCompassEnabled = true
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+        mMap.isMyLocationEnabled = true
 
+
+
+    }
     private fun setupView() {
         enableEdgeToEdge()
         binding = ActivityPresentCheckInBinding.inflate(layoutInflater)
@@ -256,6 +282,16 @@ class PresentCheckInActivity : AppCompatActivity(), OnMapReadyCallback {
             response?.data?.let {
                 officeLocationUser = LatLng(it.latitude.toDouble(), it.longitude.toDouble())
                 locationId = it.company_address_id.toString()
+                mMap.addMarker(MarkerOptions().position(officeLocationUser).title("Office Location"))
+
+                mMap.addCircle(
+                    CircleOptions()
+                        .center(officeLocationUser)
+                        .radius(100.0)
+                        .strokeColor(ContextCompat.getColor(this, R.color.primary))
+                        .fillColor(ContextCompat.getColor(this, R.color.primary_transparent))
+                )
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(officeLocationUser, 100f))
                 checkUserLocation()
             }
         }
@@ -349,21 +385,6 @@ class PresentCheckInActivity : AppCompatActivity(), OnMapReadyCallback {
         Manifest.permission.ACCESS_COARSE_LOCATION
     ).all { ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED }
 
-    override fun onMapReady(googleMap: GoogleMap) {
-        mMap = googleMap
-        if (::officeLocationUser.isInitialized) {
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(officeLocationUser, 15f))
-            mMap.addMarker(MarkerOptions().position(officeLocationUser).title("Office Location"))
-            mMap.addCircle(
-                CircleOptions()
-                    .center(officeLocationUser)
-                    .radius(100.0)
-                    .strokeColor(ContextCompat.getColor(this, R.color.primary))
-            )
-        } else {
-            Log.e("PresentCheckInActivity", "officeLocationUser is not initialized")
-        }
-    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -394,6 +415,7 @@ class PresentCheckInActivity : AppCompatActivity(), OnMapReadyCallback {
             location?.let {
                 val userLatLng = LatLng(it.latitude, it.longitude)
                 distanceToOffice = calculateDistance(userLatLng, officeLocationUser)
+                mMap.addMarker(MarkerOptions().position(userLatLng).title("Your Location"))
                 if (distanceToOffice <= 100) {
                     Snackbar.make(binding.root, "You are within 100 meters!", Snackbar.LENGTH_LONG).show()
                 } else {
@@ -413,6 +435,7 @@ class PresentCheckInActivity : AppCompatActivity(), OnMapReadyCallback {
         val c = 2 * atan2(sqrt(a), sqrt(1 - a))
         return radiusOfEarth * c
     }
+
 
     override fun onResume() {
         super.onResume()

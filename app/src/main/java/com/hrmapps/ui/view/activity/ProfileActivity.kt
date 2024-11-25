@@ -86,6 +86,7 @@ class ProfileActivity : AppCompatActivity() {
         }
         setupUI()
         observerViewModel()
+        displayVersionName()
     }
 
     private fun observerViewModel(){
@@ -138,6 +139,16 @@ class ProfileActivity : AppCompatActivity() {
             } else {
                 binding.loadingBar.visibility = View.GONE
             }
+        }
+
+    }
+    private fun displayVersionName() {
+        try {
+            val versionName = packageManager.getPackageInfo(packageName, 0).versionName
+            binding.tvVersion.text = getString(R.string.version_name, versionName)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            binding.tvVersion.text = getString(R.string.version_name_error)
         }
     }
 }

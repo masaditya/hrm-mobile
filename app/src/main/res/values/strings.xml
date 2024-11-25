@@ -6,5 +6,8 @@
         <item>Home</item>
         <item>Other</item>
     </string-array>
+    <string name="version_name">Version: %1$s</string>
+    <string name="version_name_error">Version: N/A</string>
+
 
 </resources>

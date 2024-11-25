@@ -70,6 +70,11 @@ class HomeFragment : Fragment() {
         setupViewModel()
         observeCheckStatus()
         observeCheckOut()
+
+        if (binding.tvCheckOut.text.isNotEmpty()){
+            observeCheckStatus()
+        }
+
         handler.post(runnable)
         return binding.root
     }
@@ -132,8 +137,8 @@ class HomeFragment : Fragment() {
                         val clockCheckOut = response.data.clock_out_time
                         val clockOutTime = getHourFromDateString(clockCheckOut)
                         binding.tvCheckOut.text = "Check Out : $clockOutTime"
-                        binding.tvLengthOfWork.text = calculateTotalHours(clockInTime, clockOutTime)
                         binding.linearLayout4.visibility = View.VISIBLE
+                        binding.tvLengthOfWork.text = calculateTotalHours(clockInTime, clockOutTime)
                     }
                 }else{
                     binding.tvPresent.text = "Check In"
@@ -272,6 +277,7 @@ class HomeFragment : Fragment() {
             binding.linearLayout4.visibility = View.VISIBLE
             tvStatusMessage.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
             tvDetailedMessage.text = "Terima kasih atas dedikasi dan kerja keras Anda hari ini. Semoga istirahat Anda menyenangkan!"
+            observeCheckStatus()
         } else {
             LottieCompositionFactory.fromRawRes(requireContext(), R.raw.failed).addListener { composition ->
                 ivStatusIcon.setComposition(composition)
@@ -297,6 +303,7 @@ class HomeFragment : Fragment() {
                     handler.postDelayed(this, 1000)
                 } else {
                     dialog.dismiss()
+                    observeCheckStatus()
                 }
             }
         }

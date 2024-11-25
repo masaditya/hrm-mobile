@@ -17,4 +17,5 @@ data class AttendanceResponse(
     val prev_page_url: String?,
     val to: Int?,
     val total: Int
+
 )

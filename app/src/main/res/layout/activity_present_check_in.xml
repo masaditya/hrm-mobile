@@ -135,6 +135,7 @@
             android:layout_marginVertical="4dp"
             android:background="@drawable/rounded"
             android:padding="8dp"
+            android:textSize="14sp"
             android:textColor="@color/black"
             android:hint="Autofill from GPS"
             android:editable="false"

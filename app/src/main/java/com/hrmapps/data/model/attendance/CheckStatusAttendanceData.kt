@@ -1,6 +1,7 @@
 package com.hrmapps.data.model.attendance
 
 data class CheckStatusAttendanceData (
+    val id : Int,
     val company_id: Int,
     val user_id: Int,
     val clock_in_time: String,

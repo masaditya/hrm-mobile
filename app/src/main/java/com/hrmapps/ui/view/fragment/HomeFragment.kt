@@ -29,6 +29,7 @@ import com.hrmapps.data.repository.attendance.CheckOutRepository
 import com.hrmapps.databinding.FragmentHomeBinding
 import com.hrmapps.ui.view.activity.CameraActivity
 import com.hrmapps.ui.view.activity.LeaveActivity
+import com.hrmapps.ui.view.activity.LoginActivity
 import com.hrmapps.ui.view.activity.RequestActivity
 import com.hrmapps.ui.viewmodel.attendance.CheckInStatusViewModel
 import com.hrmapps.ui.viewmodel.attendance.CheckInStatusViewModelFactory
@@ -49,6 +50,7 @@ class HomeFragment : Fragment() {
     private lateinit var checkStatusViewModel: CheckInStatusViewModel
     private lateinit var checkOutViewModel: CheckOutViewModel
     private var setCheckIn: String = ""
+    private var idCheckIn: Int = 0
     private lateinit var sharedPreferences: SharedPreferences
     private val handler = Handler()
     private val runnable: Runnable = object : Runnable {
@@ -57,7 +59,6 @@ class HomeFragment : Fragment() {
             handler.postDelayed(this, 1000)
         }
     }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -74,8 +75,8 @@ class HomeFragment : Fragment() {
             requireContext().getSharedPreferences("isLoggedIn", AppCompatActivity.MODE_PRIVATE)
         setupUI()
         setupViewModel()
-        observeCheckOut()
         observeCheckStatus()
+        observeCheckOut()
         handler.post(runnable)
 
     }
@@ -114,8 +115,6 @@ class HomeFragment : Fragment() {
                     putExtra("Page", "Check-In Selfie")
                 }
                 startActivity(intent)
-
-
             }
         }
 
@@ -130,6 +129,7 @@ class HomeFragment : Fragment() {
     private fun observeCheckStatus() {
         checkStatusViewModel.checkInStatus.observe(viewLifecycleOwner) { response ->
             if (response?.data != null) {
+                idCheckIn = response.data.id
                 if (response.data.clock_in_time != null){
                     binding.tvPresent.text = "Check Out"
                     val clockCheckIn = response.data.clock_in_time
@@ -142,9 +142,7 @@ class HomeFragment : Fragment() {
                         binding.tvCheckOut.text = "Check Out : $clockOutTime"
                         binding.tvLengthOfWork.text = calculateTotalHours(clockInTime, clockOutTime)
                         binding.linearLayout4.visibility = View.VISIBLE
-
                     }
-
                 }else{
                     binding.tvPresent.text = "Check In"
                 }
@@ -234,7 +232,6 @@ class HomeFragment : Fragment() {
         builder.setPositiveButton("Yes") { dialog, which ->
             val token = sharedPreferences.getString("token", "")
             val userId = sharedPreferences.getInt("userId", 0)
-            val idCheckIn = sharedPreferences.getInt("idCheckIn", 0)
             val clockOutTime = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Calendar.getInstance().time)
             val autoClockOut = "0"
             val clockOutIp = "182.1.120.208"

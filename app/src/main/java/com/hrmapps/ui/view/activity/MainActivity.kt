@@ -109,8 +109,15 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.userResponse.observe(this) { response ->
             val user = response.data
+            if (user.id_user == 0){sharedPreferences.edit().clear().apply()
+                sharedPreferences.edit().putBoolean("isLoggedIn", false).apply()
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
             binding.tvUserName.text = user.name
             binding.tvEmail.text = user.email
+
         }
 
         viewModel.error.observe(this) { errorMessage ->

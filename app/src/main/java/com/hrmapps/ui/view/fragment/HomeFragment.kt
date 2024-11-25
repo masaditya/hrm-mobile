@@ -188,6 +188,7 @@ class HomeFragment : Fragment() {
         }
 
         checkOutViewModel.error.observe(viewLifecycleOwner) { errorMessage ->
+            Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
             Log.d("HomeFragment", "Error message: $errorMessage")
         }
         checkOutViewModel.isLoading.observe(viewLifecycleOwner, Observer { isLoading ->

@@ -244,6 +244,7 @@ class PresentCheckInActivity : AppCompatActivity(), OnMapReadyCallback {
             binding.etAddress.setText(address)
         } catch (e: IOException) {
             binding.etAddress.setText("Geocoder failed")
+            Toast.makeText(this, "Geocoder failed", Toast.LENGTH_SHORT).show()
             Log.e("GeocoderError", e.message.toString())
         }
     }
@@ -296,6 +297,7 @@ class PresentCheckInActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
         getLocationOfficeUserViewModel.errorMessage.observe(this) {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
             Log.e("LocationOfficeUserError", it)
         }
     }
@@ -307,6 +309,7 @@ class PresentCheckInActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         viewModel.errorMessage.observe(this) {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
             Log.e("CheckInError", it)
         }
 

@@ -64,13 +64,6 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
         sharedPreferences =
             requireContext().getSharedPreferences("isLoggedIn", AppCompatActivity.MODE_PRIVATE)
         setupUI()
@@ -78,9 +71,8 @@ class HomeFragment : Fragment() {
         observeCheckStatus()
         observeCheckOut()
         handler.post(runnable)
-
+        return binding.root
     }
-
 
     private fun setupViewModel() {
         val apiService = RetrofitBuilder.apiService

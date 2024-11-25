@@ -1,9 +1,12 @@
 package com.hrmapps.ui.view.activity
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -105,11 +108,16 @@ class MainActivity : AppCompatActivity() {
     private fun setupUI() {
         val token = sharedPreferences.getString("token", "").toString()
 
+        if (!isInternetAvailable()) {
+            Toast.makeText(this, "No internet connection. Please check your network.", Toast.LENGTH_LONG).show()
+            return
+        }
+
         viewModel.getUserLogin(token)
 
         viewModel.userResponse.observe(this) { response ->
             val user = response.data
-            if (user.id_user == 0){
+            if (user.id_user == 0) {
                 sharedPreferences.edit().clear().apply()
                 sharedPreferences.edit().putBoolean("isLoggedIn", false).apply()
                 val intent = Intent(this, LoginActivity::class.java)
@@ -118,18 +126,17 @@ class MainActivity : AppCompatActivity() {
             }
             binding.tvUserName.text = user.name
             binding.tvEmail.text = user.email
-
         }
 
         viewModel.error.observe(this) { errorMessage ->
             Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
         }
+
         viewModel.isLoading.observe(this) { isLoading ->
             if (isLoading) {
                 binding.shimmerLayoutProfile.startShimmer()
                 binding.layoutProfile.visibility = View.GONE
                 binding.shimmerLayoutProfile.visibility = View.VISIBLE
-
             } else {
                 lifecycleScope.launch {
                     delay(1000)
@@ -140,6 +147,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
     private fun checkLocationPermission() {
         if (!hasLocationPermission()) {
             ActivityCompat.requestPermissions(
@@ -154,6 +162,13 @@ class MainActivity : AppCompatActivity() {
         Manifest.permission.ACCESS_FINE_LOCATION,
         Manifest.permission.ACCESS_COARSE_LOCATION
     ).all { ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED }
+
+    private fun isInternetAvailable(): Boolean {
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val network = connectivityManager.activeNetwork
+        val networkCapabilities = connectivityManager.getNetworkCapabilities(network)
+        return networkCapabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
+    }
 
 
 }

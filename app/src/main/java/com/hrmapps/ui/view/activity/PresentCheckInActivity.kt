@@ -35,7 +35,6 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
 import com.hrmapps.R
@@ -143,7 +142,7 @@ class PresentCheckInActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun setupListeners() {
         binding.reSelfie.setOnClickListener {
-            val intent = Intent(this, CameraActivity::class.java)
+            val intent = Intent(this, CameraCheckInActivity::class.java)
             intent.putExtra("Page", "Check-In Selfie")
             startActivity(intent)
         }

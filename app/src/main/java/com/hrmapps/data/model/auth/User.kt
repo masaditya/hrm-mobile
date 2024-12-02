@@ -38,6 +38,8 @@ data class User(
     val register_ip: String,
     val location_details: String?,
     val inactive_date: String?,
-    val twitter_id: String?
+    val twitter_id: String?,
+    val role_id: Int?,
+    val role_name: String?
 )
 

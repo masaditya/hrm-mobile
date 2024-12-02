@@ -66,12 +66,17 @@ class LoginActivity : AppCompatActivity() {
         authViewModel.loginResponse.observe(this, Observer { response ->
             progressDialog.dismiss()
             if (response != null && response.message == "Login successful") {
-                startActivity(Intent(this, MainActivity::class.java))
-                sharedPreferences.edit().putBoolean("isLoggedIn", true).apply()
-                sharedPreferences.edit().putString("token", response.token).apply()
-                sharedPreferences.edit().putInt("userId", response.user.id).apply()
-                sharedPreferences.edit().putInt("companyId", response.user.company_id).apply()
-                finish()
+                if (response.user.role_name == "employee"){
+                    startActivity(Intent(this, MainActivity::class.java))
+                    sharedPreferences.edit().putBoolean("isLoggedIn", true).apply()
+                    sharedPreferences.edit().putString("token", response.token).apply()
+                    sharedPreferences.edit().putInt("userId", response.user.id).apply()
+                    sharedPreferences.edit().putInt("companyId", response.user.company_id).apply()
+                    finish()
+                }else{
+                    Toast.makeText(this, "Login Staff", Toast.LENGTH_SHORT).show()
+                }
+
             }
         })
         authViewModel.errorMessage.observe(this, Observer { errorMessage ->

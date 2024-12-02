@@ -1,6 +1,7 @@
 package com.hrmapps.data.api
 
 import androidx.lifecycle.LiveData
+import com.hrmapps.data.model.leave.LeaveTypes
 import com.hrmapps.data.model.response.AttendanceResponse
 import com.hrmapps.data.model.response.CheckInResponse
 import com.hrmapps.data.model.response.CheckInStatusResponse
@@ -8,6 +9,7 @@ import com.hrmapps.data.model.response.CheckOutResponse
 import com.hrmapps.data.model.response.CheckPointResponse
 import com.hrmapps.data.model.response.CreatePatrolResponse
 import com.hrmapps.data.model.response.GetUserResponse
+import com.hrmapps.data.model.response.LeaveTypesResponse
 import com.hrmapps.data.model.response.LocationOfficeUserResponse
 import com.hrmapps.data.model.response.LoginResponse
 import okhttp3.MultipartBody
@@ -107,5 +109,9 @@ interface ApiService {
         @Field("password_confirmation") passwordConfirmation: String
     ): Call<ResponseBody>
 
+    @GET("api/leave-types")
+    fun getLeaveTypes(
+        @Header("Authorization") token: String,
+    ): Call<LeaveTypesResponse>
 
 }

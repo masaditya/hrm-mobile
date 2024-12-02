@@ -238,6 +238,8 @@ class PatrolActivity : AppCompatActivity() {
 
 
     }
+
+
     private fun bitmapToFile(bitmap: Bitmap): File? {
         val file = File(cacheDir, "${System.currentTimeMillis()}.jpg").apply { createNewFile() }
         var quality = 100

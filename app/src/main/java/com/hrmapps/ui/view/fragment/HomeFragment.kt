@@ -28,6 +28,7 @@ import com.hrmapps.data.repository.attendance.CheckInStatusRepository
 import com.hrmapps.data.repository.attendance.CheckOutRepository
 import com.hrmapps.databinding.FragmentHomeBinding
 import com.hrmapps.ui.view.activity.CameraCheckInActivity
+import com.hrmapps.ui.view.activity.CameraPatrolActivity
 import com.hrmapps.ui.view.activity.LeaveActivity
 import com.hrmapps.ui.view.activity.RequestActivity
 import com.hrmapps.ui.viewmodel.attendance.CheckInStatusViewModel
@@ -97,7 +98,7 @@ class HomeFragment : Fragment() {
 
     private fun setupUI() {
         binding.btPatroli.setOnClickListener {
-            val intent = Intent(requireContext(), CameraCheckInActivity::class.java)
+            val intent = Intent(requireContext(), CameraPatrolActivity::class.java)
             startActivity(intent)
         }
         binding.btPresent.setOnClickListener {

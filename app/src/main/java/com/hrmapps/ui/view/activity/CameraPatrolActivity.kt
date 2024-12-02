@@ -54,7 +54,7 @@ class CameraPatrolActivity : AppCompatActivity() {
             toggleCamera()
         }
 
-        binding.toolbar.title = "Check-In Selfie"
+        binding.toolbar.title = "Patrol Selfie"
         startCamera()
     }
 
@@ -84,22 +84,11 @@ class CameraPatrolActivity : AppCompatActivity() {
 
     private fun toggleCamera() {
         val rotateAnimator = ObjectAnimator.ofFloat(binding.switchCameraButton, "rotation", 0f, 360f)
-        rotateAnimator.duration = 500
+        rotateAnimator.duration = 300
         rotateAnimator.interpolator = AccelerateDecelerateInterpolator()
         rotateAnimator.start()
-        binding.previewView.animate()
-            .alpha(0f)
-            .setDuration(300)
-            .withEndAction {
-                isFrontCamera = !isFrontCamera
-                startCamera()
-
-                binding.previewView.animate()
-                    .alpha(1f)
-                    .setDuration(300)
-                    .start()
-            }
-            .start()
+        isFrontCamera = !isFrontCamera
+        startCamera()
     }
 
 
@@ -121,7 +110,7 @@ class CameraPatrolActivity : AppCompatActivity() {
         binding.previewView.bitmap?.let { bitmap ->
             val imageUri = saveBitmapToFile(bitmap)
             if (imageUri != null) {
-                val intent = Intent(this, PresentCheckInActivity::class.java)
+                val intent = Intent(this, PatrolActivity::class.java)
                 intent.putExtra("captured_image_uri", imageUri.toString())
                 startActivity(intent)
                 finish()

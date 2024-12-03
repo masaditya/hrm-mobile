@@ -9,8 +9,9 @@ import com.hrmapps.R
 import com.hrmapps.data.model.leave.Leave
 import com.hrmapps.databinding.ItemRiwayatCutiBinding
 
-class LeaveAdapter(private val leaveList: List<Leave>) :
-    RecyclerView.Adapter<LeaveAdapter.LeaveViewHolder>() {
+class LeaveAdapter : RecyclerView.Adapter<LeaveAdapter.LeaveViewHolder>() {
+
+    private val leaveList = mutableListOf<Leave>() // Gunakan mutableList untuk data dinamis.
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LeaveViewHolder {
         val binding = ItemRiwayatCutiBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -24,15 +25,22 @@ class LeaveAdapter(private val leaveList: List<Leave>) :
 
     override fun getItemCount() = leaveList.size
 
+    fun setData(newLeaveList: List<Leave>) {
+        leaveList.clear()
+        leaveList.addAll(newLeaveList)
+        notifyDataSetChanged()
+    }
+
     inner class LeaveViewHolder(private val binding: ItemRiwayatCutiBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         private var isExpanded = false
 
         fun bind(leave: Leave) {
-            binding.tvCutiRange.text = "${leave.tanggalCuti} - ${leave.tanggalMasuk}"
-            binding.tvCutiType.text = "Tipe Cuti: ${leave.typeCuti}"
-            binding.tvAlasanCuti.text = leave.alasan
+            binding.tvCutiRange.text = "${leave.leave_date}"
+            binding.tvCutiType.text = "Tipe Cuti: ${leave.leave_type_id}"
+            binding.tvAlasanCuti.text = leave.reason
+            binding.tvStatus.text = leave.status
 
             binding.layoutAlasanCuti.visibility = if (isExpanded) View.VISIBLE else View.GONE
             binding.expandIcon.setImageResource(if (isExpanded) R.drawable.ic_expand_less else R.drawable.ic_expand_more)
@@ -48,47 +56,9 @@ class LeaveAdapter(private val leaveList: List<Leave>) :
                 )
                 binding.expandIcon.startAnimation(anim)
 
-                if (isExpanded) {
-                    expand(binding.layoutAlasanCuti)
-                } else {
-                    collapse(binding.layoutAlasanCuti)
-                }
+                binding.layoutAlasanCuti.visibility = if (isExpanded) View.VISIBLE else View.GONE
             }
-
-            binding.root.setOnClickListener {
-                binding.expandIcon.performClick()
-            }
-        }
-
-        private fun expand(view: View) {
-            view.visibility = View.VISIBLE
-            view.measure(View.MeasureSpec.makeMeasureSpec(view.width, View.MeasureSpec.AT_MOST),
-                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED))
-
-            view.alpha = 0f
-            view.scaleY = 0.0f
-            view.animate()
-                .alpha(1f)
-                .scaleY(1f)
-                .setDuration(200)
-                .withStartAction { view.layoutParams.height = 0; view.requestLayout() }
-                .withEndAction { view.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT; view.requestLayout() }
-                .start()
-        }
-
-        private fun collapse(view: View) {
-            val initialHeight = view.measuredHeight
-
-            view.animate()
-                .alpha(0f)
-                .scaleY(0f)
-                .setDuration(200)
-                .withEndAction {
-                    view.visibility = View.GONE
-                    view.layoutParams.height = initialHeight
-                }
-                .start()
         }
     }
-
 }
+

@@ -93,6 +93,9 @@ class PatrolActivity : AppCompatActivity() {
         if (imgUri != null) {
             getBitmapFromUri(imgUri)
         }
+        binding.mToolbar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
     }
 
     private fun setupListeners() {
@@ -263,6 +266,7 @@ class PatrolActivity : AppCompatActivity() {
         val bitmap = BitmapFactory.decodeStream(inputStream)
         binding.imgPreview.setImageBitmap(bitmap)
     }
+
     private fun checkLocationPermission() {
         if (!hasLocationPermission()) {
             ActivityCompat.requestPermissions(

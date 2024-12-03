@@ -2,12 +2,12 @@ package com.hrmapps.ui.view.activity
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.View
 import android.webkit.WebSettings
+import android.webkit.WebView
 import android.webkit.WebViewClient
-import androidx.activity.enableEdgeToEdge
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.hrmapps.R
 import com.hrmapps.databinding.ActivityTimeSheetBinding
 
@@ -18,37 +18,42 @@ class TimeSheetActivity : AppCompatActivity() {
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         binding = ActivityTimeSheetBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        setupWebView()
 
-        binding.toolbar.setNavigationOnClickListener {
-            onBackPressed()
-        }
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (binding.webView.canGoBack()) {
+                    binding.webView.goBack()
+                } else {
+                    finish()
+                }
+            }
+        })
+    }
 
+    @SuppressLint("SetJavaScriptEnabled")
+    private fun setupWebView() {
         val webSettings: WebSettings = binding.webView.settings
         webSettings.javaScriptEnabled = true
-        webSettings.supportZoom()
         webSettings.domStorageEnabled = true
+        webSettings.useWideViewPort = true
+        webSettings.loadWithOverviewMode = true
 
-        binding.webView.webViewClient = WebViewClient()
+        binding.webView.webViewClient = object : WebViewClient() {
+            override fun onPageStarted(view: WebView?, url: String?, favicon: android.graphics.Bitmap?) {
+                super.onPageStarted(view, url, favicon)
+                binding.loadingBar.visibility = View.VISIBLE // Tampilkan ProgressBar
+            }
+
+            override fun onPageFinished(view: WebView?, url: String?) {
+                super.onPageFinished(view, url)
+                binding.loadingBar.visibility = View.GONE // Sembunyikan ProgressBar
+            }
+        }
         binding.webView.loadUrl("https://i.mahawangsa.com/fops")
     }
 
-    @Deprecated("This method has been deprecated in favor of using the\n      {@link OnBackPressedDispatcher} via {@link #getOnBackPressedDispatcher()}.\n      The OnBackPressedDispatcher controls how back button events are dispatched\n      to one or more {@link OnBackPressedCallback} objects.")
-    override fun onBackPressed() {
-        if (binding.webView.canGoBack()) {
-            binding.webView.goBack()
-        } else {
-            super.onBackPressed()
-        }
-    }
 }

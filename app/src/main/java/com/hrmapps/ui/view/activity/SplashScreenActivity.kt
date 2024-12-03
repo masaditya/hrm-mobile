@@ -32,10 +32,13 @@ class SplashScreenActivity : AppCompatActivity() {
         setContentView(binding.root)
         sharedPreferences = getSharedPreferences("isLoggedIn", MODE_PRIVATE)
         val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
+        val role = sharedPreferences.getString("role", "")
         setupAnimation()
 
         if (isInternetAvailable()) {
-            navigateAfterDelay(isLoggedIn)
+            if (role != null) {
+                navigateAfterDelay(isLoggedIn, role)
+            }
         } else {
             showNoInternetMessage()
         }
@@ -49,11 +52,16 @@ class SplashScreenActivity : AppCompatActivity() {
         }
     }
 
-    private fun navigateAfterDelay(isLoggedIn: Boolean) {
+    private fun navigateAfterDelay(isLoggedIn: Boolean, role: String) {
         Handler(Looper.getMainLooper()).postDelayed({
             binding.lavLoading.visibility = View.GONE
             val nextActivity =
-                if (isLoggedIn) MainActivity::class.java else LoginActivity::class.java
+                if (isLoggedIn && role == "employee")
+                    MainActivity::class.java
+                else if (isLoggedIn && role == "staff")
+                    TimeSheetActivity::class.java
+                else
+                    LoginActivity::class.java
             startActivity(Intent(this, nextActivity))
             finish()
         }, 3000)

@@ -1,7 +1,5 @@
 package com.hrmapps.data.api
 
-import androidx.lifecycle.LiveData
-import com.hrmapps.data.model.leave.LeaveTypes
 import com.hrmapps.data.model.response.AttendanceResponse
 import com.hrmapps.data.model.response.CheckInResponse
 import com.hrmapps.data.model.response.CheckInStatusResponse
@@ -9,15 +7,15 @@ import com.hrmapps.data.model.response.CheckOutResponse
 import com.hrmapps.data.model.response.CheckPointResponse
 import com.hrmapps.data.model.response.CreatePatrolResponse
 import com.hrmapps.data.model.response.GetUserResponse
+import com.hrmapps.data.model.response.CreateLeaveResponse
+import com.hrmapps.data.model.response.LeaveListResponse
 import com.hrmapps.data.model.response.LeaveTypesResponse
 import com.hrmapps.data.model.response.LocationOfficeUserResponse
 import com.hrmapps.data.model.response.LoginResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import okhttp3.Response
 import okhttp3.ResponseBody
 import retrofit2.Call
-import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -114,4 +112,21 @@ interface ApiService {
         @Header("Authorization") token: String,
     ): Call<LeaveTypesResponse>
 
+    @Multipart
+    @POST("api/leave/create")
+    suspend fun createLeave(
+        @Header("Authorization") token: String,
+        @PartMap requestBody: Map<String, @JvmSuppressWildcards RequestBody>,
+        @Part image: MultipartBody.Part? = null
+    ): CreateLeaveResponse
+
+
+
+    @GET("api/leaves")
+    suspend fun getLeave(
+        @Header("Authorization") token: String,
+        @Query("page") page: Int,
+        @Query("limit") limit: Int,
+        @Query("user_id") userId: Int
+    ): LeaveListResponse
 }

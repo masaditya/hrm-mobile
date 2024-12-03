@@ -69,6 +69,7 @@ class LoginActivity : AppCompatActivity() {
                 if (response.user.role_name == "employee"){
                     startActivity(Intent(this, MainActivity::class.java))
                     sharedPreferences.edit().putBoolean("isLoggedIn", true).apply()
+                    sharedPreferences.edit().putString("role", "employee").apply()
                     sharedPreferences.edit().putString("token", response.token).apply()
                     sharedPreferences.edit().putInt("userId", response.user.id).apply()
                     sharedPreferences.edit().putInt("companyId", response.user.company_id).apply()
@@ -76,6 +77,7 @@ class LoginActivity : AppCompatActivity() {
                 }else if (response.user.role_name == "staff"){
                     startActivity(Intent(this, TimeSheetActivity::class.java))
                     sharedPreferences.edit().putBoolean("isLoggedIn", true).apply()
+                    sharedPreferences.edit().putString("role", "staff").apply()
                     sharedPreferences.edit().putString("token", response.token).apply()
                     sharedPreferences.edit().putInt("userId", response.user.id).apply()
                     sharedPreferences.edit().putInt("companyId", response.user.company_id).apply()

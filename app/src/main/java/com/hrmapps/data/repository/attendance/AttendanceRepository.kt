@@ -10,21 +10,6 @@ import com.hrmapps.data.paging.AttendancePagingSource
 
 class AttendanceRepository(private val apiService: ApiService) {
 
-    fun getPagedAttendance(
-        token: String,
-        workingFrom: String,
-        userId: Int
-    ): Flow<PagingData<AttendanceData>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = 10,
-                enablePlaceholders = false
-            ),
-            pagingSourceFactory = {
-                AttendancePagingSource(apiService, token, workingFrom, userId)
-            }
-        ).flow
-    }
     suspend fun fetchAttendance(
         token: String,
         workingFrom: String,

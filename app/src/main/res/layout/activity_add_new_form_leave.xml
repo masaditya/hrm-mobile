@@ -17,67 +17,48 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_back"
-        app:title="New Leave"
+        app:title="Form Leave"
         app:titleTextColor="@color/white" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayoutLeaveType"
-        android:layout_width="0dp"
+    <com.skydoves.powerspinner.PowerSpinnerView
+        android:id="@+id/powerSpinnerView2"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/rounded_spinner"
+        android:paddingStart="16dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="16dp"
+        android:hint="Pilih Tipe Cuti"
+        android:spinnerMode="dropdown"
+        android:textColor="@color/black"
+        android:textColorHint="@color/white"
+        android:textSize="16sp"
         app:layout_constraintTop_toBottomOf="@id/mToolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginHorizontal="16dp"
         android:layout_marginVertical="16dp"
-        app:hintEnabled="true"
-        android:hint="Tipe Cuti"
-        app:boxBackgroundColor="@color/transparent"
-        android:textColorHint="@color/white"
-        app:hintAnimationEnabled="true">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editTextLeaveType"
-            android:layout_width="match_parent"
-            android:textColor="@color/white"
-            android:layout_height="wrap_content"/>
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <TextView
-        android:id="@+id/textViewSelectDuration"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Select Duration"
-        android:textColor="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/textInputLayoutLeaveType"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginVertical="8dp" />
-
-    <RadioGroup
-        android:id="@+id/radioGroupDuration"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/textViewSelectDuration"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginHorizontal="16dp">
-
-        <RadioButton
-            android:id="@+id/radio_full_day"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="Full Day"
-            android:textColor="@color/white" />
-    </RadioGroup>
+        app:spinner_arrow_animate="true"
+        app:spinner_arrow_animate_duration="200"
+        app:spinner_arrow_gravity="end"
+        app:spinner_arrow_padding="16dp"
+        app:spinner_arrow_show="true"
+        app:spinner_arrow_tint="@color/white"
+        app:spinner_divider_color="@color/white"
+        app:spinner_divider_show="true"
+        app:spinner_item_array="@array/working_locations"
+        app:spinner_item_height="46dp"
+        app:spinner_popup_animation="fade"
+        app:spinner_popup_background="@color/white"
+        app:spinner_popup_elevation="14dp" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayoutStartDate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/radioGroupDuration"
+        app:layout_constraintTop_toBottomOf="@id/powerSpinnerView2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginHorizontal="16dp"
@@ -105,7 +86,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginHorizontal="16dp"
         app:hintEnabled="true"
-        android:visibility="gone"
         android:layout_marginVertical="8dp"
         app:hintAnimationEnabled="true"
         android:hint="Tanggal Selesai Cuti"
@@ -117,7 +97,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:focusable="false"
-
             android:clickable="true"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -141,13 +120,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"
-            android:lines="3"/>
+            android:maxLines="5"/>
     </com.google.android.material.textfield.TextInputLayout>
     <TextView
         android:id="@+id/textViewFileAttachment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Attach Supporting Document"
+        android:text="Attach Supporting Image"
         android:textColor="@color/white"
         app:layout_constraintTop_toBottomOf="@id/textInputLayoutLeaveReason"
         app:layout_constraintStart_toStartOf="parent"
@@ -191,5 +170,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewFileName" />
-
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/loadingBar"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        android:visibility="gone"
+        app:lottie_speed="1.0"
+        app:lottie_rawRes="@raw/loading" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -38,7 +38,7 @@ class LeaveAdapter : RecyclerView.Adapter<LeaveAdapter.LeaveViewHolder>() {
 
         fun bind(leave: Leave) {
             binding.tvCutiRange.text = "${leave.leave_date}"
-            binding.tvCutiType.text = "Tipe Cuti: ${leave.leave_type_id}"
+            binding.tvCutiType.text = "Tipe Cuti: ${leave.type_name}"
             binding.tvAlasanCuti.text = leave.reason
             binding.tvStatus.text = leave.status
 

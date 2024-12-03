@@ -4,6 +4,7 @@ data class Leave(
     val company_id: Int,
     val user_id: Int,
     val leave_type_id: Int,
+    val type_name: String,
     val duration: String,
     val leave_date: String,
     val reason: String,

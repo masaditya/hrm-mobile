@@ -5,11 +5,14 @@ import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ArrayAdapter
@@ -19,6 +22,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.ViewModelProvider
 import com.airbnb.lottie.LottieAnimationView
 import com.airbnb.lottie.LottieCompositionFactory
@@ -33,6 +37,7 @@ import com.hrmapps.ui.viewmodel.leave.LeaveTypesViewModelFactory
 import com.hrmapps.ui.viewmodel.leave.CreateLeaveViewModel
 import com.hrmapps.ui.viewmodel.leave.CreateLeaveViewModelFactory
 import java.io.File
+import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -54,6 +59,7 @@ class AddNewFormLeaveActivity : AppCompatActivity() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
                 selectedFileUri = result.data?.data
+                getBitmapFromUri(selectedFileUri.toString())
                 binding.textViewFileName.text = selectedFileUri?.path
             }
         }
@@ -265,7 +271,7 @@ class AddNewFormLeaveActivity : AppCompatActivity() {
         val endDate = binding.editTextEndDate.text.toString()
         val leaveReason = binding.editTextLeaveReason.text.toString()
 
-        val file: File? = selectedFileUri?.let { File(it.path) }
+        val photo = binding.ivPreview.drawable?.toBitmap()?.let { bitmapToFile(it) }
 
         createLeaveViewModel.createLeave(
             token,
@@ -276,9 +282,32 @@ class AddNewFormLeaveActivity : AppCompatActivity() {
             endDate,
             leaveReason,
             userId.toString(),
-            file
+            photo
         )
 
+    }
+    private fun bitmapToFile(bitmap: Bitmap): File? {
+        val file = File(cacheDir, "${System.currentTimeMillis()}.jpg").apply { createNewFile() }
+        var quality = 100
+        var sizeInBytes: Long
+
+        do {
+            FileOutputStream(file).use {
+                bitmap.compress(Bitmap.CompressFormat.JPEG, quality, it)
+            }
+            sizeInBytes = file.length()
+            quality -= 10
+        } while (sizeInBytes > 1 * 1024 * 1024 && quality > 0)
+
+        return if (sizeInBytes <= 1 * 1024 * 1024) file else null.also {
+            Log.e("BitmapError", "Bitmap too large.")
+        }
+    }
+    private fun getBitmapFromUri(uriString: String) {
+        val uri = Uri.parse(uriString)
+        val inputStream = contentResolver.openInputStream(uri)
+        val bitmap = BitmapFactory.decodeStream(inputStream)
+        binding.ivPreview.setImageBitmap(bitmap)
     }
 
 

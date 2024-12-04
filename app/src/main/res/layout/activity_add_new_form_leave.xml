@@ -31,8 +31,8 @@
         android:paddingEnd="16dp"
         android:paddingBottom="16dp"
         android:hint="Pilih Tipe Cuti"
-        android:spinnerMode="dropdown"
-        android:textColor="@color/black"
+        android:spinnerMode="dialog"
+        android:textColor="@color/white"
         android:textColorHint="@color/white"
         android:textSize="16sp"
         app:layout_constraintTop_toBottomOf="@id/mToolbar"
@@ -49,9 +49,9 @@
         app:spinner_divider_color="@color/white"
         app:spinner_divider_show="true"
         app:spinner_item_array="@array/working_locations"
-        app:spinner_item_height="46dp"
+        app:spinner_item_height="60dp"
         app:spinner_popup_animation="fade"
-        app:spinner_popup_background="@color/white"
+        app:spinner_popup_background="@color/primary_dark"
         app:spinner_popup_elevation="14dp" />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -183,4 +183,14 @@
         android:visibility="gone"
         app:lottie_speed="1.0"
         app:lottie_rawRes="@raw/loading" />
+
+    <ImageView
+        android:id="@+id/ivPreview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="invisible"
+        app:layout_constraintTop_toBottomOf="@id/buttonSubmit"
+        app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

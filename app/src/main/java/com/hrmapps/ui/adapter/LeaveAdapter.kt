@@ -11,7 +11,7 @@ import com.hrmapps.databinding.ItemRiwayatCutiBinding
 
 class LeaveAdapter : RecyclerView.Adapter<LeaveAdapter.LeaveViewHolder>() {
 
-    private val leaveList = mutableListOf<Leave>() // Gunakan mutableList untuk data dinamis.
+    private val leaveList = mutableListOf<Leave>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LeaveViewHolder {
         val binding = ItemRiwayatCutiBinding.inflate(LayoutInflater.from(parent.context), parent, false)

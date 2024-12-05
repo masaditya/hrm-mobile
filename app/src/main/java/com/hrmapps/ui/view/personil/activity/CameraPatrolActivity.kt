@@ -1,45 +1,41 @@
-package com.hrmapps.ui.view.activity
+package com.hrmapps.ui.view.personil.activity
 
 import android.Manifest
-import android.annotation.SuppressLint
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.widget.TextView
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Toast
-import androidx.annotation.OptIn
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.camera.core.*
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ExperimentalGetImage
+import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.face.Face
 import com.hrmapps.R
-import com.hrmapps.databinding.ActivityCameraCheckInBinding
-import com.hrmapps.ui.components.FaceContourDetectionProcessor
+import com.hrmapps.databinding.ActivityCameraPatrolBinding
 import java.io.File
 import java.io.FileOutputStream
 
-class CameraCheckInActivity : AppCompatActivity() {
+class CameraPatrolActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityCameraCheckInBinding
-    private var isFaceDetected = false
-    private lateinit var faceContourProcessor: FaceContourDetectionProcessor
-
+    private lateinit var binding: ActivityCameraPatrolBinding
     private val CAMERA_PERMISSION_CODE = 100
-
+    private var isFrontCamera = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityCameraCheckInBinding.inflate(layoutInflater)
+        enableEdgeToEdge()
+        binding = ActivityCameraPatrolBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -50,13 +46,15 @@ class CameraCheckInActivity : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        binding.captureButton.isEnabled = false
         binding.captureButton.setOnClickListener {
             captureImage()
         }
 
-        binding.toolbar.title = "Check-In Selfie"
-        faceContourProcessor = FaceContourDetectionProcessor(binding.faceOverlayView)
+        binding.switchCameraButton.setOnClickListener {
+            toggleCamera()
+        }
+
+        binding.toolbar.title = "Patrol Selfie"
         startCamera()
     }
 
@@ -71,54 +69,29 @@ class CameraCheckInActivity : AppCompatActivity() {
                 it.surfaceProvider = binding.previewView.surfaceProvider
             }
 
-            val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
-
-            val imageAnalysis = ImageAnalysis.Builder()
-                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                .build()
-                .also { analyzer ->
-                    analyzer.setAnalyzer(ContextCompat.getMainExecutor(this)) { imageProxy ->
-                        analyzeImage(imageProxy)
-                    }
-                }
+            val cameraSelector = if (isFrontCamera) {
+                CameraSelector.DEFAULT_FRONT_CAMERA
+            } else {
+                CameraSelector.DEFAULT_BACK_CAMERA
+            }
 
             cameraProvider.unbindAll()
             cameraProvider.bindToLifecycle(
-                this, cameraSelector, preview, imageAnalysis
+                this, cameraSelector, preview
             )
         }, ContextCompat.getMainExecutor(this))
     }
 
-    @SuppressLint("UnsafeOptInUsageError")
-    private fun analyzeImage(imageProxy: ImageProxy) {
-        val mediaImage = imageProxy.image
-        val rotationDegrees = imageProxy.imageInfo.rotationDegrees
-
-        if (mediaImage != null) {
-            val image = InputImage.fromMediaImage(mediaImage, rotationDegrees)
-            faceContourProcessor.detectInImage(image)
-                .addOnSuccessListener { faces ->
-                    updateFaceDetectionStatus(faces)
-                }
-                .addOnCompleteListener {
-                    imageProxy.close()
-                }
-        }
+    private fun toggleCamera() {
+        val rotateAnimator = ObjectAnimator.ofFloat(binding.switchCameraButton, "rotation", 0f, 360f)
+        rotateAnimator.duration = 300
+        rotateAnimator.interpolator = AccelerateDecelerateInterpolator()
+        rotateAnimator.start()
+        isFrontCamera = !isFrontCamera
+        startCamera()
     }
 
-    private fun updateFaceDetectionStatus(faces: List<Face>) {
-        if (faces.isNotEmpty()) {
-            isFaceDetected = true
-            binding.captureButton.isEnabled = true
-            binding.faceWarningText.visibility = TextView.GONE
 
-        } else {
-            isFaceDetected = false
-            binding.captureButton.isEnabled = false
-            binding.faceWarningText.visibility = TextView.VISIBLE
-        }
-
-    }
     private fun saveBitmapToFile(bitmap: Bitmap): Uri? {
         val file = File(cacheDir, "captured_image.png")
         return try {
@@ -132,24 +105,25 @@ class CameraCheckInActivity : AppCompatActivity() {
             null
         }
     }
+
     private fun captureImage() {
         binding.previewView.bitmap?.let { bitmap ->
             val imageUri = saveBitmapToFile(bitmap)
             if (imageUri != null) {
-                    val intent = Intent(this, PresentCheckInActivity::class.java)
-                    intent.putExtra("captured_image_uri", imageUri.toString())
-                    startActivity(intent)
-                    finish()
-                }
+                val intent = Intent(this, PatrolActivity::class.java)
+                intent.putExtra("captured_image_uri", imageUri.toString())
+                startActivity(intent)
+                finish()
+            }
         }
     }
+
     private fun checkCameraPermission() {
         if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.CAMERA
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(Manifest.permission.CAMERA),
@@ -157,7 +131,6 @@ class CameraCheckInActivity : AppCompatActivity() {
             )
         } else {
             Log.d("Permission", "Izin kamera diberikan")
-
         }
     }
 
@@ -170,15 +143,9 @@ class CameraCheckInActivity : AppCompatActivity() {
         if (requestCode == CAMERA_PERMISSION_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Log.d("Permission", "Izin kamera diberikan")
-
             } else {
                 Toast.makeText(this, "Izin kamera ditolak", Toast.LENGTH_SHORT).show()
             }
         }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        faceContourProcessor.stop()
     }
 }

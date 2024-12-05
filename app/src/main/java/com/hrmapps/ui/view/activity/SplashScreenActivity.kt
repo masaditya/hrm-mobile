@@ -9,15 +9,14 @@ import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.hrmapps.R
 import com.hrmapps.databinding.ActivitySplashScreenBinding
+import com.hrmapps.ui.view.personil.activity.MainActivity
+import com.hrmapps.ui.view.staff.activity.TimeSheetActivity
 
 @SuppressLint("CustomSplashScreen")
 class SplashScreenActivity : AppCompatActivity() {

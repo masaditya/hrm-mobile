@@ -8,6 +8,8 @@
     </string-array>
     <string name="version_name">Version: %1$s</string>
     <string name="version_name_error">Version: N/A</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

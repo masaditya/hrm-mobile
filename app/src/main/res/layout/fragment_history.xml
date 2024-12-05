@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/radial_gradient_circle"
-    tools:context=".ui.view.fragment.HistoryFragment">
+    tools:context=".ui.view.personil.fragment.HistoryFragment">
 
     <LinearLayout
         android:id="@+id/layoutHistory"

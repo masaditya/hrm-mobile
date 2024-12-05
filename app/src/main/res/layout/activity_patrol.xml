@@ -6,7 +6,7 @@
     android:background="@drawable/radial_gradient_circle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.view.activity.PatrolActivity">
+    tools:context=".ui.view.personil.activity.PatrolActivity">
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/mToolbar"
         android:layout_width="match_parent"

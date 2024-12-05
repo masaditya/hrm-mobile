@@ -1,4 +1,4 @@
-package com.hrmapps.ui.view.activity
+package com.hrmapps.ui.view.staff.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -6,8 +6,6 @@ import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
@@ -27,6 +25,7 @@ import com.hrmapps.ui.viewmodel.auth.AuthViewModelFactory
 import com.hrmapps.data.api.ApiService
 import com.hrmapps.data.api.RetrofitBuilder
 import com.hrmapps.data.repository.auth.AuthRepository
+import com.hrmapps.ui.view.activity.LoginActivity
 
 class TimeSheetActivity : AppCompatActivity() {
 

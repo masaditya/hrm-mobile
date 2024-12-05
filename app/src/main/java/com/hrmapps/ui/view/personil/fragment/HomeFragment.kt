@@ -1,4 +1,4 @@
-package com.hrmapps.ui.view.fragment
+package com.hrmapps.ui.view.personil.fragment
 
 import android.annotation.SuppressLint
 import android.app.Dialog
@@ -27,10 +27,10 @@ import com.hrmapps.data.api.RetrofitBuilder
 import com.hrmapps.data.repository.attendance.CheckInStatusRepository
 import com.hrmapps.data.repository.attendance.CheckOutRepository
 import com.hrmapps.databinding.FragmentHomeBinding
-import com.hrmapps.ui.view.activity.CameraCheckInActivity
-import com.hrmapps.ui.view.activity.CameraPatrolActivity
-import com.hrmapps.ui.view.activity.LeaveActivity
-import com.hrmapps.ui.view.activity.RequestActivity
+import com.hrmapps.ui.view.personil.activity.CameraCheckInActivity
+import com.hrmapps.ui.view.personil.activity.CameraPatrolActivity
+import com.hrmapps.ui.view.personil.activity.LeaveActivity
+import com.hrmapps.ui.view.personil.activity.RequestActivity
 import com.hrmapps.ui.viewmodel.attendance.CheckInStatusViewModel
 import com.hrmapps.ui.viewmodel.attendance.CheckInStatusViewModelFactory
 import com.hrmapps.ui.viewmodel.attendance.CheckOutViewModel

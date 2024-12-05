@@ -1,4 +1,4 @@
-package com.hrmapps.ui.view.fragment
+package com.hrmapps.ui.view.personil.fragment
 
 import android.annotation.SuppressLint
 import android.content.SharedPreferences

@@ -1,4 +1,4 @@
-package com.hrmapps.ui.view.activity
+package com.hrmapps.ui.view.personil.activity
 
 import android.Manifest
 import android.content.Context
@@ -24,7 +24,8 @@ import com.hrmapps.R
 import com.hrmapps.data.api.RetrofitBuilder
 import com.hrmapps.data.repository.auth.GetUserRepository
 import com.hrmapps.databinding.ActivityMainBinding
-import com.hrmapps.ui.view.fragment.HomeFragment
+import com.hrmapps.ui.view.activity.LoginActivity
+import com.hrmapps.ui.view.personil.fragment.HomeFragment
 import com.hrmapps.ui.viewmodel.auth.GetUserLoginViewModel
 import com.hrmapps.ui.viewmodel.auth.GetUserLoginViewModelFactory
 import com.qamar.curvedbottomnaviagtion.CurvedBottomNavigation

@@ -1,4 +1,4 @@
-package com.hrmapps.ui.view.activity
+package com.hrmapps.ui.view.personil.activity
 
 import android.content.Intent
 import android.content.SharedPreferences
@@ -18,6 +18,7 @@ import com.hrmapps.data.api.RetrofitBuilder
 import com.hrmapps.data.repository.auth.AuthRepository
 import com.hrmapps.data.repository.auth.GetUserRepository
 import com.hrmapps.databinding.ActivityProfileBinding
+import com.hrmapps.ui.view.activity.LoginActivity
 import com.hrmapps.ui.viewmodel.auth.AuthViewModel
 import com.hrmapps.ui.viewmodel.auth.AuthViewModelFactory
 import com.hrmapps.ui.viewmodel.auth.GetUserLoginViewModel

@@ -1,4 +1,4 @@
-package com.hrmapps.ui.view.activity
+package com.hrmapps.ui.view.personil.activity
 
 import android.Manifest
 import android.app.Dialog

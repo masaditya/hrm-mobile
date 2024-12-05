@@ -6,7 +6,7 @@
     android:background="@drawable/radial_gradient_circle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.view.activity.EditProfileActivity">
+    tools:context=".ui.view.personil.activity.EditProfileActivity">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"

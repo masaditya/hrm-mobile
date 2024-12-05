@@ -13,9 +13,11 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
 
     <application
@@ -30,46 +32,58 @@
         android:theme="@style/Theme.HRMApps"
         tools:targetApi="tiramisu">
         <activity
-            android:name=".ui.view.activity.TimeSheetActivity"
+            android:name=".ui.view.staff.activity.CameraCheckInStaffActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.view.activity.CameraPatrolActivity"
+            android:name=".ui.view.staff.activity.PresentCheckInStaffActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.view.activity.ChangePasswordActivity"
+            android:name=".ui.view.staff.activity.LeaveStaffActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.view.activity.PatrolActivity"
+            android:name=".ui.view.staff.activity.StaffMainActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.view.activity.MainActivity"
+            android:name=".ui.view.staff.activity.TimeSheetActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.view.activity.EditProfileActivity"
+            android:name=".ui.view.personil.activity.CameraPatrolActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.view.activity.ProfileActivity"
+            android:name=".ui.view.personil.activity.ChangePasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.view.personil.activity.PatrolActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.view.personil.activity.MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.view.personil.activity.EditProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.view.personil.activity.ProfileActivity"
             android:exported="false" />
         <activity
             android:name=".ui.view.activity.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.view.activity.JobDetailActivity"
+            android:name=".ui.view.personil.activity.JobDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.view.activity.RequestActivity"
+            android:name=".ui.view.personil.activity.RequestActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.view.activity.AddNewFormLeaveActivity"
+            android:name=".ui.view.personil.activity.AddNewFormLeaveActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.view.activity.LeaveActivity"
+            android:name=".ui.view.personil.activity.LeaveActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.view.activity.PresentCheckInActivity"
+            android:name=".ui.view.personil.activity.PresentCheckInActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.view.activity.CameraCheckInActivity"
+            android:name=".ui.view.personil.activity.CameraCheckInActivity"
             android:exported="false" />
         <activity
             android:name=".ui.view.activity.SplashScreenActivity"

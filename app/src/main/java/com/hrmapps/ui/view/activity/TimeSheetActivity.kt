@@ -4,15 +4,19 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.webkit.ValueCallback
+import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -29,6 +33,16 @@ class TimeSheetActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTimeSheetBinding
     private lateinit var authViewModel: AuthViewModel
     private lateinit var sharedPreferences: SharedPreferences
+    private var fileChooserCallback: ValueCallback<Array<Uri>>? = null
+
+    private val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        if (uri != null) {
+            fileChooserCallback?.onReceiveValue(arrayOf(uri))
+        } else {
+            fileChooserCallback?.onReceiveValue(null)
+        }
+        fileChooserCallback = null
+    }
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,6 +84,9 @@ class TimeSheetActivity : AppCompatActivity() {
             javaScriptEnabled = true
             domStorageEnabled = true
             useWideViewPort = true
+            allowFileAccess = true
+            allowFileAccessFromFileURLs = true
+            allowUniversalAccessFromFileURLs = true
             loadWithOverviewMode = true
         }
 
@@ -80,6 +97,17 @@ class TimeSheetActivity : AppCompatActivity() {
 
             override fun onPageFinished(view: WebView?, url: String?) {
                 binding.loadingBar.visibility = View.GONE
+            }
+        }
+        binding.webView.webChromeClient = object : WebChromeClient() {
+            override fun onShowFileChooser(
+                webView: WebView?,
+                filePathCallback: ValueCallback<Array<Uri>>?,
+                fileChooserParams: FileChooserParams?
+            ): Boolean {
+                fileChooserCallback = filePathCallback
+                galleryLauncher.launch("image/*") // Open gallery for image selection
+                return true
             }
         }
 

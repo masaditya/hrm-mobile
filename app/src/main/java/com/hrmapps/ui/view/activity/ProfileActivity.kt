@@ -12,6 +12,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.hrmapps.R
 import com.hrmapps.data.api.RetrofitBuilder
 import com.hrmapps.data.repository.auth.AuthRepository
@@ -77,9 +78,6 @@ class ProfileActivity : AppCompatActivity() {
 
 
         }
-        binding.btEditImage.setOnClickListener {
-            Toast.makeText(this, "Edit Photo Profile", Toast.LENGTH_SHORT).show()
-        }
         binding.buttonChangePassword.setOnClickListener {
             val intent = Intent(this, ChangePasswordActivity::class.java)
             startActivity(intent)
@@ -128,6 +126,10 @@ class ProfileActivity : AppCompatActivity() {
             binding.etCompany.setText(user.designation)
             binding.etRole.setText(user.role)
             binding.etEmployeeId.setText(user.employee_id)
+            Glide.with(this)
+                .load("https://app.mahawangsa.com/public/user-uploads/avatar/${user.image}")
+                .placeholder(R.drawable.placeholeder)
+                .into(binding.profileImage)
         }
 
         viewModel.error.observe(this) { errorMessage ->

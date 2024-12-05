@@ -12,7 +12,7 @@ android {
         minSdk = 24
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0.2"
+        versionName = "1.0.3"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
     }
@@ -69,13 +69,20 @@ dependencies {
     //Spinner
     //noinspection UseTomlInstead
     implementation(libs.powerspinner)
+
     // Paging 3
     implementation(libs.androidx.paging.runtime.ktx)
 
+    //Camera
     implementation(libs.face.detection)
     implementation(libs.androidx.camera.camera2)
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.androidx.camera.view)
+
+    //Glide
+    implementation(libs.glide)
+
+    //Lottie
 
     //lottie
     implementation(libs.lottie)

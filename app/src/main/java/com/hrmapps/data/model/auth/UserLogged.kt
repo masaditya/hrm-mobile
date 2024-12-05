@@ -5,6 +5,7 @@ data class UserLogged (
     val employee_id: String,
     val company_name: String,
     val name: String,
+    val image: String,
     val email: String,
     val designation: String,
     val role: String,

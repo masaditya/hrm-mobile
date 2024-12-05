@@ -35,20 +35,9 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             app:civ_border_color="@color/transparent"
-            android:scaleType="centerCrop"
-            android:src="@drawable/logo_app"
+            android:src="@drawable/placeholeder"
             />
 
-        <ImageView
-            android:id="@+id/btEditImage"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/circle_shape_button"
-            android:padding="12dp"
-            android:backgroundTint="@color/primary"
-            android:src="@drawable/ic_photo" />
     </RelativeLayout>
 
 

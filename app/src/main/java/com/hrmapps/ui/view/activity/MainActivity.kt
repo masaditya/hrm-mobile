@@ -19,6 +19,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import com.hrmapps.R
 import com.hrmapps.data.api.RetrofitBuilder
 import com.hrmapps.data.repository.auth.GetUserRepository
@@ -126,6 +127,10 @@ class MainActivity : AppCompatActivity() {
             }
             binding.tvUserName.text = user.name
             binding.tvEmail.text = user.email
+            Glide.with(this)
+                .load("https://app.mahawangsa.com/public/user-uploads/avatar/${user.image}")
+                .placeholder(R.drawable.placeholeder)
+                .into(binding.civUser)
         }
 
         viewModel.error.observe(this) { errorMessage ->

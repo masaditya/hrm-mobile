@@ -64,6 +64,10 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginVertical="8dp"
         app:hintEnabled="true"
+        app:boxStrokeColor="@color/transparent"
+        app:hintTextColor="@color/white"
+        app:counterTextColor="@color/white"
+        app:placeholderTextColor="@color/white"
         app:hintAnimationEnabled="true"
         android:hint="Tanggal Mulai Cuti"
         app:boxBackgroundColor="@color/transparent"
@@ -74,6 +78,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:focusable="false"
+            android:textColor="@color/white"
             android:clickable="true"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -88,6 +93,10 @@
         app:hintEnabled="true"
         android:layout_marginVertical="8dp"
         app:hintAnimationEnabled="true"
+        app:boxStrokeColor="@color/transparent"
+        app:hintTextColor="@color/white"
+        app:counterTextColor="@color/white"
+        app:placeholderTextColor="@color/white"
         android:hint="Tanggal Selesai Cuti"
         app:boxBackgroundColor="@color/transparent"
         android:textColorHint="@color/white">
@@ -97,6 +106,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:focusable="false"
+            android:textColor="@color/white"
             android:clickable="true"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -110,6 +120,10 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginVertical="8dp"
         app:hintEnabled="true"
+        app:boxStrokeColor="@color/transparent"
+        app:hintTextColor="@color/white"
+        app:counterTextColor="@color/white"
+        app:placeholderTextColor="@color/white"
         app:hintAnimationEnabled="true"
         android:hint="Alasan Cuti"
         app:boxBackgroundColor="@color/transparent"
@@ -120,6 +134,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"
+            android:textColor="@color/white"
             android:maxLines="5"/>
     </com.google.android.material.textfield.TextInputLayout>
     <TextView

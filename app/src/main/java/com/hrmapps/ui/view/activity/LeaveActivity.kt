@@ -92,4 +92,9 @@ class LeaveActivity : AppCompatActivity() {
         viewModel.fetchLeaveData(token, userId)
 
     }
+    override fun onResume() {
+        super.onResume()
+        viewModel.fetchLeaveData(token, userId)
+    }
+
 }

@@ -351,11 +351,12 @@ class AddNewFormLeaveActivity : AppCompatActivity() {
                 } else {
                     dialog.dismiss()
                     if (isSuccess) {
-                        finish()
+                       finish()
                     }
                 }
             }
         }
         handler.post(countdownRunnable)
     }
+
 }

@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.hrmapps.R
 import com.hrmapps.databinding.ActivitySplashScreenBinding
 import com.hrmapps.ui.view.personil.activity.MainActivity
+import com.hrmapps.ui.view.staff.activity.StaffMainActivity
 import com.hrmapps.ui.view.staff.activity.TimeSheetActivity
 
 @SuppressLint("CustomSplashScreen")
@@ -58,7 +59,7 @@ class SplashScreenActivity : AppCompatActivity() {
                 if (isLoggedIn && role == "employee")
                     MainActivity::class.java
                 else if (isLoggedIn && role == "staff")
-                    TimeSheetActivity::class.java
+                    StaffMainActivity::class.java
                 else
                     LoginActivity::class.java
             startActivity(Intent(this, nextActivity))

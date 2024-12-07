@@ -32,6 +32,7 @@ import com.hrmapps.ui.view.personil.activity.CameraCheckInActivity
 import com.hrmapps.ui.view.personil.activity.CameraPatrolActivity
 import com.hrmapps.ui.view.personil.activity.LeaveActivity
 import com.hrmapps.ui.view.personil.activity.RequestActivity
+import com.hrmapps.ui.view.staff.activity.LeaveStaffActivity
 import com.hrmapps.ui.view.staff.activity.TimeSheetActivity
 import com.hrmapps.ui.viewmodel.attendance.CheckInStatusViewModel
 import com.hrmapps.ui.viewmodel.attendance.CheckInStatusViewModelFactory
@@ -108,7 +109,7 @@ class HomeStaffFragment : Fragment() {
         }
 
         binding.btLeave.setOnClickListener {
-            startActivity(Intent(requireContext(), LeaveActivity::class.java))
+            startActivity(Intent(requireContext(), LeaveStaffActivity::class.java))
         }
         binding.btEForm.setOnClickListener {
             startActivity(Intent(requireContext(), TimeSheetActivity::class.java))

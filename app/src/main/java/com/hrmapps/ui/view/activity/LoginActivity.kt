@@ -18,6 +18,7 @@ import com.hrmapps.data.api.RetrofitBuilder
 import com.hrmapps.data.repository.auth.AuthRepository
 import com.hrmapps.databinding.ActivityLoginBinding
 import com.hrmapps.ui.view.personil.activity.MainActivity
+import com.hrmapps.ui.view.staff.activity.StaffMainActivity
 import com.hrmapps.ui.view.staff.activity.TimeSheetActivity
 import com.hrmapps.ui.viewmodel.auth.AuthViewModel
 import com.hrmapps.ui.viewmodel.auth.AuthViewModelFactory
@@ -77,7 +78,7 @@ class LoginActivity : AppCompatActivity() {
                     sharedPreferences.edit().putInt("companyId", response.user.company_id).apply()
                     finish()
                 }else if (response.user.role_name == "staff"){
-                    startActivity(Intent(this, TimeSheetActivity::class.java))
+                    startActivity(Intent(this, StaffMainActivity::class.java))
                     sharedPreferences.edit().putBoolean("isLoggedIn", true).apply()
                     sharedPreferences.edit().putString("role", "staff").apply()
                     sharedPreferences.edit().putString("token", response.token).apply()

@@ -32,6 +32,15 @@
         android:theme="@style/Theme.HRMApps"
         tools:targetApi="tiramisu">
         <activity
+            android:name=".ui.view.staff.activity.ChangePasswordStaffActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.view.staff.activity.ProfileStaffActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.view.staff.activity.AddNewFormLeaveStaffActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.view.staff.activity.CameraCheckInStaffActivity"
             android:exported="false" />
         <activity

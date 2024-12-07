@@ -16,6 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:title="TimeSheet"
+        app:navigationIcon="@drawable/ic_back"
         app:titleTextColor="@color/white" />
 
     <WebView

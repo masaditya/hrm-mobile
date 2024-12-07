@@ -27,6 +27,7 @@ import com.hrmapps.databinding.ActivityStaffMainBinding
 import com.hrmapps.ui.view.activity.LoginActivity
 import com.hrmapps.ui.view.personil.activity.ProfileActivity
 import com.hrmapps.ui.view.personil.fragment.HomeFragment
+import com.hrmapps.ui.view.staff.fragment.HomeStaffFragment
 import com.hrmapps.ui.viewmodel.auth.GetUserLoginViewModel
 import com.hrmapps.ui.viewmodel.auth.GetUserLoginViewModelFactory
 import com.qamar.curvedbottomnaviagtion.CurvedBottomNavigation
@@ -81,7 +82,7 @@ class StaffMainActivity : AppCompatActivity() {
                 }
 
                 2 -> {
-                    loadFragment(HomeFragment())
+                    loadFragment(HomeStaffFragment())
                 }
 
                 3 -> {
@@ -91,13 +92,13 @@ class StaffMainActivity : AppCompatActivity() {
         }
 
         binding.bottomNavigation.show(2)
-        loadFragment(HomeFragment())
+        loadFragment(HomeStaffFragment())
 
         binding.civUser.setOnClickListener {
-            startActivity(Intent(this, ProfileActivity::class.java))
+            startActivity(Intent(this, ProfileStaffActivity::class.java))
         }
         binding.llProfile.setOnClickListener {
-            startActivity(Intent(this, ProfileActivity::class.java))
+            startActivity(Intent(this, ProfileStaffActivity::class.java))
         }
         setupUI()
 

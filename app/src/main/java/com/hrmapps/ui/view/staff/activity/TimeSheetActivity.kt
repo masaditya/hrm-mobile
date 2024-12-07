@@ -1,12 +1,15 @@
 package com.hrmapps.ui.view.staff.activity
 
 import android.annotation.SuppressLint
+import android.app.DownloadManager
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.view.View
+import android.webkit.URLUtil
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
@@ -51,15 +54,8 @@ class TimeSheetActivity : AppCompatActivity() {
 
         sharedPreferences = getSharedPreferences("isLoggedIn", MODE_PRIVATE)
 
-        menuInflater.inflate(R.menu.menu_staff, binding.toolbar.menu)
-        binding.toolbar.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.menuLogout -> {
-                    showLogoutDialog()
-                    true
-                }
-                else -> false
-            }
+        binding.toolbar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
         }
 
         setupViewModel()
@@ -108,7 +104,24 @@ class TimeSheetActivity : AppCompatActivity() {
                 galleryLauncher.launch("image/*") // Open gallery for image selection
                 return true
             }
+
         }
+        binding.webView.setDownloadListener { url, userAgent, contentDisposition, mimeType, _ ->
+            val request = DownloadManager.Request(Uri.parse(url)).apply {
+                setMimeType(mimeType)
+                addRequestHeader("User-Agent", userAgent)
+                setTitle(URLUtil.guessFileName(url, contentDisposition, mimeType))
+                setDescription("Downloading file...")
+                setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, URLUtil.guessFileName(url, contentDisposition, mimeType))
+            }
+
+            val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
+            downloadManager.enqueue(request)
+
+            Toast.makeText(this, "Download started...", Toast.LENGTH_SHORT).show()
+        }
+
 
         binding.webView.loadUrl("https://i.mahawangsa.com/fops")
     }
@@ -150,20 +163,4 @@ class TimeSheetActivity : AppCompatActivity() {
     }
 
 
-    private fun showLogoutDialog() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Logout")
-        builder.setMessage("Are you sure you want to logout?")
-        builder.setPositiveButton("Yes") { dialog, _ ->
-            val token = sharedPreferences.getString("token", null)
-            if (token != null) {
-                authViewModel.logout(token)
-            }
-            dialog.dismiss()
-        }
-        builder.setNegativeButton("No") { dialog, _ ->
-            dialog.dismiss()
-        }
-        builder.create().show()
-    }
 }

@@ -80,7 +80,11 @@ class ProfileStaffActivity : AppCompatActivity() {
 
         }
         binding.buttonChangePassword.setOnClickListener {
-            val intent = Intent(this, ChangePasswordActivity::class.java)
+            val intent = Intent(this, ChangePasswordStaffActivity::class.java)
+            startActivity(intent)
+        }
+        binding.buttonChangeEmail.setOnClickListener{
+            val intent = Intent(this, ChangeEmailStaffActivity::class.java)
             startActivity(intent)
         }
         setupUI()

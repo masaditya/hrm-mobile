@@ -78,6 +78,7 @@ class PresentCheckInStaffActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var longitude: String
     private val LOCATION_PERMISSION_REQUEST_CODE = 2
     private var distanceToOffice: Double = 0.0
+    private var isRadiusActive: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -163,15 +164,25 @@ class PresentCheckInStaffActivity : AppCompatActivity(), OnMapReadyCallback {
         binding.powerSpinnerView2.setItems(resources.getStringArray(R.array.working_locations).toList())
         binding.powerSpinnerView2.setOnSpinnerItemSelectedListener<String> { _, _, _, newItem ->
             workFromType = newItem
+            if (newItem == "office"){
+                isRadiusActive
+            } else {
+                !isRadiusActive
+            }
         }
 
         binding.btnCheckIn.setOnClickListener {
-            if (distanceToOffice <= 100) {
-                Snackbar.make(findViewById(R.id.main), "You are within 100 meters!", Snackbar.LENGTH_LONG).show()
+            if (isRadiusActive){
+                if (distanceToOffice <= 100) {
+                    Snackbar.make(findViewById(R.id.main), "You are within 100 meters!", Snackbar.LENGTH_LONG).show()
+                    observeViewModel()
+                    handleCheckIn()
+                } else {
+                    Snackbar.make(findViewById(R.id.main), "You are outside the 100 meter range!", Snackbar.LENGTH_LONG).show()
+                }
+            }else{
                 observeViewModel()
                 handleCheckIn()
-            } else {
-                Snackbar.make(findViewById(R.id.main), "You are outside the 100 meter range!", Snackbar.LENGTH_LONG).show()
             }
         }
     }
@@ -207,7 +218,7 @@ class PresentCheckInStaffActivity : AppCompatActivity(), OnMapReadyCallback {
             "no",
             latitude,
             longitude,
-            "office",
+            workFromType,
             "yes",
             photo,
             token
@@ -367,6 +378,7 @@ class PresentCheckInStaffActivity : AppCompatActivity(), OnMapReadyCallback {
         val countdownRunnable = object : Runnable {
             override fun run() {
                 tvClose.text = "Menutup otomatis dalam $countdown detik"
+                dialog.setCancelable(false)
                 if (countdown > 0) {
                     countdown--
                     handler.postDelayed(this, 1000)
@@ -429,11 +441,7 @@ class PresentCheckInStaffActivity : AppCompatActivity(), OnMapReadyCallback {
                 val userLatLng = LatLng(it.latitude, it.longitude)
                 distanceToOffice = calculateDistance(userLatLng, officeLocationUser)
                 mMap.addMarker(MarkerOptions().position(userLatLng).title("Your Location"))
-                if (distanceToOffice <= 100) {
-                    Snackbar.make(binding.root, "You are within 100 meters!", Snackbar.LENGTH_LONG).show()
-                } else {
-                    Snackbar.make(binding.root, "You are outside the 100 meter range!", Snackbar.LENGTH_LONG).show()
-                }
+
             }
         }
     }

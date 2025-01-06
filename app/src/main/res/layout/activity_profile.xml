@@ -20,6 +20,7 @@
         app:navigationIcon="@drawable/ic_back"
         app:title="Profile"
         app:titleTextColor="@color/white" />
+
     <RelativeLayout
         android:id="@+id/ll"
         android:layout_width="155dp"
@@ -137,7 +138,24 @@
             android:inputType="none"
             android:enabled="false"/>
     </com.google.android.material.textfield.TextInputLayout>
-
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonChangeEmail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Ganti Email"
+        android:drawableLeft="@drawable/ic_email"
+        android:textAlignment="textStart"
+        android:textColor="@color/white"
+        android:textAllCaps="false"
+        app:cornerRadius="6dp"
+        android:paddingVertical="16dp"
+        android:textSize="16sp"
+        app:backgroundTint="@color/primary"
+        app:layout_constraintTop_toBottomOf="@id/employeeIdTIL"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"
+        android:layout_marginHorizontal="16dp" />
     <com.google.android.material.button.MaterialButton
         android:id="@+id/buttonChangePassword"
         android:layout_width="0dp"
@@ -151,10 +169,9 @@
         android:paddingVertical="16dp"
         android:textSize="16sp"
         app:backgroundTint="@color/primary"
-        app:layout_constraintTop_toBottomOf="@id/employeeIdTIL"
+        app:layout_constraintTop_toBottomOf="@id/buttonChangeEmail"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="24dp"
         android:layout_marginHorizontal="16dp" />
 
     <com.google.android.material.button.MaterialButton

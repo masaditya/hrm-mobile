@@ -23,7 +23,8 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
     private val _changePasswordResult = MutableLiveData<Result<Boolean>>()
     val changePasswordResult: LiveData<Result<Boolean>> get() = _changePasswordResult
 
-
+    private val _updateEmailResult = MutableLiveData<Result<Boolean>>()
+    val updateEmailResult: LiveData<Result<Boolean>> get() = _updateEmailResult
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -38,6 +39,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
                 override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                     if (response.isSuccessful) {
                         _loginResponse.postValue(response.body())
+                        _errorMessage.postValue(response.body()?.message)
                         _isLoading.postValue(false)
                     } else {
                         _loginResponse.postValue(null)
@@ -77,6 +79,19 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
                 _errorMessage.value = "Password updated successfully"
             } else {
                 _errorMessage.value = "Password updated failed: ${result.exceptionOrNull()?.message}"
+            }
+        }
+    }
+
+    fun changeEmail(token: String, id: Int, newEmail: String) {
+        _isLoading.value = true
+        authRepository.updateEmail(token, id, newEmail).observeForever { result ->
+            _updateEmailResult.value = result
+            _isLoading.value = false
+            if (result.isSuccess) {
+                _errorMessage.value = "Email updated successfully"
+            } else {
+                _errorMessage.value = "Email update failed: ${result.exceptionOrNull()?.message}"
             }
         }
     }

@@ -4,6 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.hrmapps.data.api.ApiService
 import com.hrmapps.data.model.response.LoginResponse
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -51,6 +54,31 @@ class AuthRepository(private val apiService: ApiService) {
         })
         return result
 
+    }
+
+    fun updateEmail(token: String, id: Int, newEmail: String): MutableLiveData<Result<Boolean>> {
+        val result = MutableLiveData<Result<Boolean>>()
+
+        val requestBody = RequestBody.create(
+            "application/x-www-form-urlencoded".toMediaTypeOrNull(),
+            "email=$newEmail"
+        )
+
+        apiService.updateEmail("Bearer $token", id, requestBody).enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    result.value = Result.success(true)
+                } else {
+                    result.value = Result.failure(Throwable("Update email failed"))
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                result.value = Result.failure(t)
+            }
+        })
+
+        return result
     }
 
 

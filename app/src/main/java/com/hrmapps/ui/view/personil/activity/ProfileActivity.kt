@@ -79,10 +79,15 @@ class ProfileActivity : AppCompatActivity() {
 
 
         }
+        binding.buttonChangeEmail.setOnClickListener {
+            val intent = Intent(this, ChangeEmailActivity::class.java)
+            startActivity(intent)
+        }
         binding.buttonChangePassword.setOnClickListener {
             val intent = Intent(this, ChangePasswordActivity::class.java)
             startActivity(intent)
         }
+
         setupUI()
         observerViewModel()
         displayVersionName()

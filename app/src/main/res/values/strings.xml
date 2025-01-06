@@ -1,10 +1,9 @@
 <resources>
     <string name="app_name">Emahawangsa</string>
-    <string name="apiKey">MAPS_API_KEY</string>
+    <string name="apiKey">AIzaSyCBG4la8IQUuxwVXMlB4OV5CINHhcY2iGo</string>
     <string-array name="working_locations">
         <item>office</item>
-        <item>Home</item>
-        <item>Other</item>
+        <item>other</item>
     </string-array>
     <string name="version_name">Version: %1$s</string>
     <string name="version_name_error">Version: N/A</string>

@@ -32,6 +32,9 @@
         android:theme="@style/Theme.HRMApps"
         tools:targetApi="tiramisu">
         <activity
+            android:name=".ui.view.staff.activity.ChangeEmailStaffActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.view.staff.activity.ChangePasswordStaffActivity"
             android:exported="false" />
         <activity
@@ -68,7 +71,7 @@
             android:name=".ui.view.personil.activity.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.view.personil.activity.EditProfileActivity"
+            android:name=".ui.view.personil.activity.ChangeEmailActivity"
             android:exported="false" />
         <activity
             android:name=".ui.view.personil.activity.ProfileActivity"

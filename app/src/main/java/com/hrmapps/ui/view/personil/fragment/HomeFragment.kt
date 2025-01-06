@@ -294,6 +294,7 @@ class HomeFragment : Fragment() {
         val countdownRunnable = object : Runnable {
             override fun run() {
                 tvClose.text = "Menutup otomatis dalam $countdown detik"
+                dialog.setCancelable(false)
                 if (countdown > 0) {
                     countdown--
                     handler.postDelayed(this, 1000)

@@ -12,15 +12,14 @@ android {
         minSdk = 24
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0.4"
+        versionName = "1.0.5"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
-            buildConfigField("String", "API_KEY", "\"${properties["apiKey"]}\"")
+            buildConfigField("String", "API_KEY", "\"${properties["MAPS_API_KEY"]}\"")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"

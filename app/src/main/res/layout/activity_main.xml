@@ -46,7 +46,7 @@
                     android:layout_height="wrap_content"
                     android:text="Welcome"
                     android:textColor="@color/white"
-                    android:textSize="12sp" />
+                    android:textSize="12dp" />
 
                 <TextView
                     android:id="@+id/tvUserName"
@@ -54,7 +54,7 @@
                     android:layout_height="wrap_content"
                     android:text="Demo Account"
                     android:textColor="@color/white"
-                    android:textSize="16sp"
+                    android:textSize="16dp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -63,7 +63,7 @@
                     android:layout_height="wrap_content"
                     android:text="test"
                     android:textColor="@color/white"
-                    android:textSize="12sp" />
+                    android:textSize="12dp" />
             </LinearLayout>
         </LinearLayout>
         <com.facebook.shimmer.ShimmerFrameLayout

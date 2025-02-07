@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="May"
-        android:textSize="18sp"
+        android:textSize="18dp"
         android:textStyle="bold"
         android:textColor="@android:color/black"
         android:layout_alignParentStart="true"

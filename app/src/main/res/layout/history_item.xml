@@ -19,7 +19,7 @@
         android:layout_weight="1"
         android:text="Date"
         android:textColor="@color/white"
-        android:textSize="16sp"
+        android:textSize="16dp"
         android:textStyle="bold" />
 
     <TextView
@@ -29,7 +29,7 @@
         android:layout_weight="1"
         android:text="Day"
         android:textColor="@color/white"
-        android:textSize="16sp"
+        android:textSize="16dp"
         android:textStyle="bold" />
 
     <TextView
@@ -40,7 +40,7 @@
         android:textAlignment="center"
         android:text="Start Time"
         android:textColor="@color/white"
-        android:textSize="16sp"
+        android:textSize="16dp"
         android:textStyle="bold" />
 
     <TextView
@@ -51,6 +51,6 @@
         android:gravity="end"
         android:text="End Time"
         android:textColor="@color/white"
-        android:textSize="16sp"
+        android:textSize="16dp"
         android:textStyle="bold" />
 </LinearLayout>

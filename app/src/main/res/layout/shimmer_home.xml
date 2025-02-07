@@ -39,7 +39,7 @@
                     android:text=""
                     android:background="@drawable/rounded_shape"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="16dp" />
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
                         android:text=""
                         android:background="@drawable/rounded_shape"
                         android:textColor="@color/white"
-                        android:textSize="64sp" />
+                        android:textSize="64dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -64,7 +64,7 @@
                         android:textAlignment="center"
                         android:text=":"
                         android:textColor="@color/white"
-                        android:textSize="34sp" />
+                        android:textSize="34dp" />
 
                     <TextView
                         android:id="@+id/tvMinutes"
@@ -73,7 +73,7 @@
                         android:text=""
                         android:background="@drawable/rounded_shape"
                         android:textColor="@color/white"
-                        android:textSize="64sp" />
+                        android:textSize="64dp" />
                     <TextView
                         android:id="@+id/tvSecond"
                         android:layout_width="30dp"
@@ -82,7 +82,7 @@
                         android:text=""
                         android:layout_marginStart="8dp"
                         android:textColor="@color/white"
-                        android:textSize="18sp" />
+                        android:textSize="18dp" />
                 </LinearLayout>
 
 
@@ -100,7 +100,7 @@
                 android:text=""
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textSize="16sp" />
+                android:textSize="16dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -121,7 +121,7 @@
                 android:text=""
                 android:textAlignment="textEnd"
                 android:textColor="@color/white"
-                android:textSize="16sp" />
+                android:textSize="16dp" />
 
             <View
                 android:layout_width="2dp"
@@ -137,7 +137,7 @@
                 android:layout_weight="1"
                 android:textAlignment="textStart"
                 android:textColor="@color/white"
-                android:textSize="16sp" />
+                android:textSize="16dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -159,7 +159,7 @@
                 android:text="0 hr 0 min"
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textSize="16sp" />
+                android:textSize="16dp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -171,7 +171,7 @@
         android:layout_marginHorizontal="16dp"
         android:text="Overview"
         android:textColor="@color/white"
-        android:textSize="24sp"
+        android:textSize="24dp"
         app:layout_constraintBottom_toTopOf="@+id/gridLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -258,6 +258,5 @@
         </LinearLayout>
 
     </GridLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

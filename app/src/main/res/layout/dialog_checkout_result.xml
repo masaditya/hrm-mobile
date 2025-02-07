@@ -9,6 +9,7 @@
     android:elevation="8dp"
     android:gravity="center">
 
+
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/ivStatusIcon"
         android:layout_width="100dp"
@@ -24,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Success"
-        android:textSize="18sp"
+        android:textSize="18dp"
         android:textColor="@android:color/white"
         android:gravity="center"
         android:layout_marginBottom="8dp"
@@ -35,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Terima kasih atas kerja keras Anda hari ini!"
-        android:textSize="16sp"
+        android:textSize="16dp"
         android:textColor="@android:color/white"
         android:gravity="center"
         android:layout_marginTop="4dp" />
@@ -44,7 +45,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Otomatis close dalam"
-        android:textSize="16sp"
+        android:textSize="16dp"
         android:textColor="@android:color/white"
         android:gravity="center"
         android:layout_marginTop="4dp" />

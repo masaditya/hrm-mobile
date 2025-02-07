@@ -27,7 +27,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
-    <com.hrmapps.ui.components.GraphicOverlay
+    <com.hrmpandjiadhi.ui.components.GraphicOverlay
         android:id="@+id/faceOverlayView"
         android:layout_width="match_parent"
         android:layout_height="0dp"

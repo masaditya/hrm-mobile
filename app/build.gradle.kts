@@ -4,26 +4,71 @@ plugins {
 }
 
 android {
-    namespace = "com.hrmapps"
+    namespace = "com.hrmpandjiadhi"
     compileSdk = 34
 
-    defaultConfig {
-        applicationId = "com.hrmapps"
-        minSdk = 24
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0.5"
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    flavorDimensions += "version"
+
+    productFlavors{
+        create("dev"){
+            dimension = "version"
+            applicationId = "com.hrmpandjiadhi"
+            minSdk = 24
+            targetSdk = 34
+            versionCode = 4
+            versionName = "1.0.14"
+            testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+            buildConfigField("String", "BASE_URL", "\"https://api-appam.mahawangsa.com\"")
+            buildConfigField("String", "img_url", "\"https://appam.mahawangsa.com/public/user-uploads/avatar/\"")
+
+        }
+        create("prod"){
+            dimension = "version"
+            applicationId = "com.hrmapps"
+            minSdk = 24
+            targetSdk = 34
+            versionCode = 3
+            versionName = "1.0.13"
+            testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+            buildConfigField("String", "BASE_URL", "\"https://api-app.mahawangsa.com\"")
+            buildConfigField("String", "img_url", "\"https://app.mahawangsa.com/public/user-uploads/avatar/\"")
+
+        }
     }
+
 
     buildTypes {
         release {
-            isMinifyEnabled = false
-            buildConfigField("String", "API_KEY", "\"${properties["MAPS_API_KEY"]}\"")
+            isDebuggable  = false
+            isMinifyEnabled = true
+            isShrinkResources = true
+            buildConfigField("String", "BASE_URL", "\"https://api-app.mahawangsa.com\"")
+            buildConfigField("String", "img_url", "\"https://app.mahawangsa.com/public/user-uploads/avatar/\"")
+            resValue("string", "app_name", "Emahawangsa")
+            setProperty("archivesBaseName", "Emahawangsa")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+
+        }
+        debug {
+            isDebuggable  = true
+            isMinifyEnabled = false
+            isShrinkResources = false
+            buildConfigField("String", "BASE_URL", "\"https://api-appam.mahawangsa.com\"")
+            buildConfigField("String", "img_url", "\"https://appam.mahawangsa.com/public/user-uploads/avatar/\"")
+
+            resValue("string", "app_name", "Emahawangsa - PAM")
+
+            setProperty("archivesBaseName", "Emahawangsa - PAM")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+
         }
     }
     compileOptions {
@@ -81,10 +126,14 @@ dependencies {
     //Glide
     implementation(libs.glide)
 
-    //Lottie
-
     //lottie
     implementation(libs.lottie)
     //shimmer
     implementation(libs.shimmer)
+
+    //Chucker
+    debugImplementation(libs.library)
+    releaseImplementation(libs.library.no.op)
+
+
 }

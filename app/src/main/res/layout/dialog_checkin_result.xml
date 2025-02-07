@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Check-In Berhasil"
-        android:textSize="18sp"
+        android:textSize="18dp"
         android:textColor="@android:color/white"
         android:gravity="center"
         android:layout_marginBottom="8dp"
@@ -35,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Terima kasih telah melakukan check-in hari ini!"
-        android:textSize="16sp"
+        android:textSize="16dp"
         android:textColor="@android:color/white"
         android:gravity="center"
         android:layout_marginTop="4dp" />

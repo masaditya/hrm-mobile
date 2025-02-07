@@ -1,6 +1,7 @@
 <resources>
-    <string name="app_name">Emahawangsa</string>
-    <string name="apiKey">AIzaSyCBG4la8IQUuxwVXMlB4OV5CINHhcY2iGo</string>
+    <string name="app_name">Emahawangsa - PAM</string>
+    <string name="API_KEY">apikey</string>
+
     <string-array name="working_locations">
         <item>office</item>
         <item>other</item>

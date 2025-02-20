@@ -78,5 +78,5 @@
 -dontwarn java.lang.ClassValue
 
 # Member
--keep class com.hrmpandjiadhi.data.model.** { *;}
+-keep class com.hrmapps.data.model.** { *;}
 

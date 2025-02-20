@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.hrmpandjiadhi"
+    namespace = "com.hrmapps"
     compileSdk = 34
 
     flavorDimensions += "version"
@@ -12,15 +12,15 @@ android {
     productFlavors{
         create("dev"){
             dimension = "version"
-            applicationId = "com.hrmpandjiadhi"
+            applicationId = "com.hrmapps"
             minSdk = 24
             targetSdk = 34
             versionCode = 4
             versionName = "1.0.14"
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-            buildConfigField("String", "BASE_URL", "\"https://api-appam.mahawangsa.com\"")
-            buildConfigField("String", "img_url", "\"https://appam.mahawangsa.com/public/user-uploads/avatar/\"")
+            buildConfigField("String", "BASE_URL", "\"https://api-app.mahawangsa.com\"")
+            buildConfigField("String", "img_url", "\"https://app.mahawangsa.com/public/user-uploads/avatar/\"")
 
         }
         create("prod"){
@@ -58,8 +58,8 @@ android {
             isDebuggable  = true
             isMinifyEnabled = false
             isShrinkResources = false
-            buildConfigField("String", "BASE_URL", "\"https://api-appam.mahawangsa.com\"")
-            buildConfigField("String", "img_url", "\"https://appam.mahawangsa.com/public/user-uploads/avatar/\"")
+            buildConfigField("String", "BASE_URL", "\"https://api-app.mahawangsa.com\"")
+            buildConfigField("String", "img_url", "\"https://app.mahawangsa.com/public/user-uploads/avatar/\"")
 
             resValue("string", "app_name", "Emahawangsa - PAM")
 

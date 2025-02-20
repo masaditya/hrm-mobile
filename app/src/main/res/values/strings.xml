@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Emahawangsa - PAM</string>
+    <string name="app_name">Emahawangsa</string>
     <string name="API_KEY">apikey</string>
 
     <string-array name="working_locations">
